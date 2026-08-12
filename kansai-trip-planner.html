@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>神戶・姬路・大阪・京都 五日旅行</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+  :root {
+    --ink: #173A5E;
+    --paper: #F5EFDD;
+    --surface: #FFFDF6;
+    --seal: #E0472B;
+    --matcha: #2C8C77;
+    --line: #E3D6AE;
+    --gold: #F2A93C;
+    --muted: #8C8368;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%;
+    background-color: var(--paper);
+    background-image: radial-gradient(rgba(23,58,94,0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif;
+    color: var(--ink);
+  }
+  .serif { font-family: 'Shippori Mincho', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+
+  .header {
+    position: relative; overflow: hidden; border-radius: 16px; padding: 20px;
+    color: var(--paper);
+    background: radial-gradient(circle at 88% -20%, rgba(242,169,60,0.4), transparent 45%), linear-gradient(135deg, var(--ink) 0%, #0E273F 100%);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .header .kanji-wm {
+    position: absolute; right: -6px; top: -22px; font-size: 108px; font-weight: 700;
+    color: var(--paper); opacity: 0.08; line-height: 1; pointer-events: none;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; position: relative; }
+  .header-left svg { width: 22px; height: 22px; color: var(--seal); flex-shrink: 0; }
+  .header-route { font-size: 13px; letter-spacing: 0.08em; }
+  .header-title { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .header-right { text-align: right; position: relative; }
+  .header-dates { font-size: 14px; }
+  .header-sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+  .seigaiha {
+    height: 18px; margin: 12px 0; border-radius: 6px; opacity: 0.55;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(circle at 100% 150%, var(--paper) 24%, var(--ink) 25%, var(--ink) 28%, var(--paper) 29%, var(--paper) 36%, var(--ink) 37%, var(--ink) 40%, transparent 41%),
+      radial-gradient(circle at 0 150%, var(--paper) 24%, var(--ink) 25%, var(--ink) 28%, var(--paper) 29%, var(--paper) 36%, var(--ink) 37%, var(--ink) 40%, transparent 41%),
+      radial-gradient(circle at 50% 100%, var(--paper) 10%, var(--ink) 11%, var(--ink) 23%, var(--paper) 24%, var(--paper) 30%, var(--ink) 31%, var(--ink) 43%, transparent 44%);
+    background-size: 30px 15px;
+  }
+
+  /* day selector */
+  .day-selector {
+    display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .day-selector::-webkit-scrollbar { display: none; }
+  .day-sel-btn {
+    flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 56px; height: 64px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface);
+    color: var(--ink); cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+  }
+  .day-sel-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 2px; }
+  .day-sel-week { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .day-sel-btn.active {
+    background: var(--ink); border-color: var(--ink); color: var(--paper);
+  }
+  .day-sel-btn.active .day-sel-week { color: var(--paper); opacity: 0.7; }
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .panel { display: flex; flex-direction: column; gap: 20px; }
+  .panel.hidden { display: none; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .section-head { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 12px; flex-wrap: wrap; }
+  .section-head svg { width: 16px; height: 16px; color: var(--seal); }
+
+  /* full trip button */
+  .full-trip-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 16px; border-radius: 16px; background: var(--seal); color: var(--paper);
+    font-weight: 700; font-size: 15px; text-decoration: none;
+  }
+  .full-trip-btn svg { width: 16px; height: 16px; }
+
+  /* day card */
+  .day-card { display: flex; gap: 16px; border-left: 4px solid var(--seal); }
+  .hanko-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+  .hanko {
+    width: 60px; height: 60px; border-radius: 999px; border: 2.5px solid var(--seal); color: var(--seal);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transform: rotate(-4deg); background: rgba(224,71,43,0.05);
+    box-shadow: 0 0 0 3px var(--paper), inset 0 0 0 3px rgba(224,71,43,0.13);
+  }
+  .hanko-kanji { font-size: 14px; line-height: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.02em; }
+  .hanko-line { width: 1px; flex: 1; background: var(--line); }
+  .day-body { flex: 1; min-width: 0; }
+  .day-title-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .day-title { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; }
+  .day-date {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--matcha);
+    background: #E1F0E8; padding: 2px 8px; border-radius: 999px;
+  }
+  .stop-list { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .stop-row { display: flex; align-items: flex-start; gap: 12px; }
+  .stop-icon {
+    width: 22px; height: 22px; border-radius: 999px; background: var(--paper);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .stop-icon svg { width: 12px; height: 12px; }
+  .k-spot { color: var(--matcha); }
+  .k-hotel { color: var(--gold); }
+  .k-shop { color: var(--seal); }
+  .k-airport { color: var(--ink); }
+  .k-shrine { color: var(--seal); }
+  .stop-body { flex: 1; min-width: 0; }
+  .stop-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .stop-name { font-size: 14px; }
+  .time-chip {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--seal);
+    background: #FBE0D3; padding: 1px 6px; border-radius: 999px;
+  }
+  .time-chip svg { width: 10px; height: 10px; }
+  .stop-note { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .stop-details { margin: 6px 0 0; padding-left: 16px; list-style: disc; display: flex; flex-direction: column; gap: 4px; }
+  .stop-details li { font-size: 11.5px; color: var(--ink); line-height: 1.5; }
+  .map-chip {
+    display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; padding: 2px 8px; border-radius: 999px;
+    background: #E1F0E8; color: var(--matcha); font-size: 11px; text-decoration: none; margin-top: 1px;
+  }
+  .map-chip svg { width: 11px; height: 11px; }
+  .booking-chip {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; padding: 3px 8px; border-radius: 8px;
+    background: #FCEFC9; border: 1px solid var(--line); color: #8A5A16; font-size: 11px; text-decoration: none;
+  }
+  .booking-chip svg { width: 11px; height: 11px; }
+  .link-note { font-size: 11px; color: var(--matcha); margin-top: 3px; }
+
+  /* flight card */
+  .flight-row { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; background: var(--paper); margin-bottom: 12px; }
+  .flight-row:last-child { margin-bottom: 0; }
+  .flight-row-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+  .flight-label { font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 700; color: var(--matcha); }
+  .flight-code { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .flight-route { font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+  .seal-arrow { color: var(--seal); }
+  .flight-time { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; }
+  .flight-note { font-size: 11px; color: var(--muted); }
+  .flight-details { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; padding-top: 6px; border-top: 1px dashed var(--line); }
+  .flight-details div { font-size: 11.5px; color: var(--ink); }
+  .flight-tip {
+    display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 12px;
+    background: #FCEFC9; border: 1px dashed var(--line); font-size: 12.5px; line-height: 1.6;
+  }
+  .flight-tip svg { width: 15px; height: 15px; color: var(--seal); flex-shrink: 0; margin-top: 2px; }
+
+  /* docs */
+  .progress-card { display: flex; flex-direction: column; gap: 8px; }
+  .progress-top { display: flex; align-items: center; justify-content: space-between; }
+  .progress-title { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 700; }
+  .progress-count { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--matcha); }
+  .progress-track { height: 8px; border-radius: 999px; background: var(--paper); overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--seal); width: 0%; transition: width .3s; }
+  .doc-list { display: flex; flex-direction: column; gap: 4px; }
+  .doc-item {
+    display: flex; align-items: center; gap: 8px; text-align: left; padding: 6px 8px; border-radius: 8px;
+    background: none; border: none; cursor: pointer; font-size: 14px; color: var(--ink); font-family: inherit;
+  }
+  .doc-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .doc-check { display: block; color: var(--line); }
+  .doc-check-on { display: none; color: var(--matcha); }
+  .doc-item.checked .doc-check { display: none; }
+  .doc-item.checked .doc-check-on { display: block; }
+  .doc-item.checked .doc-label { color: #B3A987; text-decoration: line-through; }
+  .doc-note {
+    display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 12px;
+    background: #FCEFC9; border: 1px dashed var(--line); font-size: 12.5px; line-height: 1.6;
+  }
+  .doc-note svg { width: 15px; height: 15px; color: var(--seal); flex-shrink: 0; margin-top: 2px; }
+
+  /* shopping */
+  .shop-list { display: flex; flex-direction: column; gap: 12px; }
+  .shop-item-row { display: flex; align-items: flex-start; gap: 10px; }
+  .shop-item-body { flex: 1; min-width: 0; }
+  .shop-item-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .shop-item-note { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .section-divider {
+    display: flex; align-items: center; gap: 10px; margin-top: 4px;
+    font-family: 'Shippori Mincho', serif; font-size: 15px; font-weight: 700; color: var(--ink);
+  }
+  .section-divider::before, .section-divider::after {
+    content: ""; height: 1px; flex: 1; background: var(--line);
+  }
+  .shop-jump-nav { display: flex; gap: 8px; margin-bottom: 20px; }
+  .shop-jump-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .shop-jump-btn svg { width: 14px; height: 14px; color: var(--seal); }
+  .souvenir-item-row { display: flex; align-items: flex-start; gap: 10px; }
+  .souvenir-rank {
+    width: 20px; height: 20px; border-radius: 999px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(224,71,43,0.1); color: var(--seal); font-size: 11px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .footer-note {
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 0 0;
+    color: var(--muted); font-size: 11px; text-align: center;
+  }
+  .footer-note svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* bottom nav */
+  .tabs {
+    position: fixed; bottom: 16px; left: 16px; right: 16px; margin: 0 auto; max-width: 420px;
+    display: flex; gap: 4px; padding: 8px; border-radius: 24px; background: var(--surface);
+    border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(23,58,94,0.18); z-index: 50;
+  }
+  .tab-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 8px 0; border: none; background: transparent; border-radius: 16px; cursor: pointer;
+    font-family: 'Shippori Mincho', serif; font-weight: 700; font-size: 11px; color: #A79A78;
+  }
+  .tab-btn svg { width: 18px; height: 18px; color: #A79A78; }
+  .tab-btn.active { background: var(--ink); color: var(--paper); }
+  .tab-btn.active svg { color: var(--seal); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="kanji-wm serif">夏</span>
+    <div class="header-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg>
+      <div>
+        <div class="header-route mono">TPE 台灣桃園 ✈ KIX 關西機場</div>
+        <div class="header-title serif">神戶・姬路・大阪・京都 五日旅行</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-dates mono">2026.09.02 → 09.06</div>
+      <div class="header-sub">5 日 4 夜</div>
+    </div>
+  </div>
+
+  <div class="seigaiha"></div>
+
+  <div id="panel-flight" class="panel">
+    
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg><span>阿關&amp;翊榛 航班資訊</span><span class="time-chip" style="color: var(--seal); background: #FBE0D3;">PNR: N2SGUL</span></div>
+      
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">去程</span>
+              <span class="flight-code">IT210 ・ 2026/09/02（三）</span>
+            </div>
+            <div class="flight-route">TPE 台灣桃園 T1・7 號櫃台 <span class="seal-arrow">→</span> KIX 關西機場</div>
+            <div class="flight-time">06:40 → 10:25</div>
+            
+            <div class="flight-details">
+              <div>乘客1：託運行李 15公斤・座位 1F</div>
+              <div>乘客2：無託運行李・座位 1E</div>
+            </div>
+          </div>
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">回程</span>
+              <span class="flight-code">IT213 ・ 2026/09/06（日）</span>
+            </div>
+            <div class="flight-route">KIX 關西機場 T1・4F <span class="seal-arrow">→</span> TPE 台灣桃園 T1</div>
+            <div class="flight-time">19:50 → 21:45</div>
+            <div class="flight-note">※ 通常為 F 櫃台，依現場螢幕為準</div>
+            <div class="flight-details">
+              <div>乘客1：託運行李 25公斤・座位 6A・優先行李</div>
+              <div>乘客2：託運行李 20公斤・座位 6B・優先行李</div>
+            </div>
+          </div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg><span>莉亞＆莉莉 航班資訊</span></div>
+      
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">去程</span>
+              <span class="flight-code">BR178 ・ 2026/09/02（三）</span>
+            </div>
+            <div class="flight-route">TPE 台灣桃園 <span class="seal-arrow">→</span> KIX 關西機場</div>
+            <div class="flight-time">06:30 → 10:10</div>
+            
+          </div>
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">回程</span>
+              <span class="flight-code">BR129 ・ 2026/09/07（一）</span>
+            </div>
+            <div class="flight-route">KIX 關西機場 <span class="seal-arrow">→</span> TPE 台灣桃園</div>
+            <div class="flight-time">18:30 → 20:30</div>
+            
+          </div>
+    </div>
+    <div class="flight-tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>建議提早 2.5–3 小時抵達機場辦理報到與行李托運，實際登機門與櫃台請以現場螢幕顯示為準。</span>
+    </div>
+  </div>
+
+  <div id="panel-itinerary" class="panel hidden">
+    <div class="day-selector">
+        <button class="day-sel-btn active" data-day="1">
+          <span class="day-sel-date">9/2</span>
+          <span class="day-sel-week">週三</span>
+        </button>
+        <button class="day-sel-btn " data-day="2">
+          <span class="day-sel-date">9/3</span>
+          <span class="day-sel-week">週四</span>
+        </button>
+        <button class="day-sel-btn " data-day="3">
+          <span class="day-sel-date">9/4</span>
+          <span class="day-sel-week">週五</span>
+        </button>
+        <button class="day-sel-btn " data-day="4">
+          <span class="day-sel-date">9/5</span>
+          <span class="day-sel-week">週六</span>
+        </button>
+        <button class="day-sel-btn " data-day="5">
+          <span class="day-sel-date">9/6</span>
+          <span class="day-sel-week">週日</span>
+        </button></div>
+    <div class="day-panel active" data-day="1">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day1</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">神戶初印象</span>
+            <span class="day-date">2026/9/2（週三）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-airport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">關西空港 KIX</span>
+            
+          </div>
+          <div class="stop-note">IT210 抵達，先 airporter 寄送行李，再搭巴士前往神戶</div>
+          
+          <a class="booking-chip" href="https://airporter.co.jp/order/create/order/?city=osaka&amp;spotId=4067&amp;ref=NEST" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg>Airporter 行李寄送預約<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          <div class="link-note">已預約，預約編號：NEST-9335</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=關西空港 KIX&amp;query_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">神戶三宮</span>
+            
+          </div>
+          <div class="stop-note">抵達市區・午餐 神戶牛</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=神戶三宮" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">生田神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=生田神社&amp;query_place_id=ChIJweCflOOOAGARSAhXB35rPCY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">北野天滿神社</span>
+            
+          </div>
+          <div class="stop-note">社務所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=北野天滿神社&amp;query_place_id=ChIJVVWpVt6OAGARONPs0K8XI4Q" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">北野異人館</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9:00–17:00・門票 大人500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=北野異人館&amp;query_place_id=ChIJT6cViuCOAGARegX_ORkvbs0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 神戶站北口</span>
+            
+          </div>
+          <div class="stop-note">入住・訂單號碼：5346595・Check-in 16:00（會員15:00）／Check-out 10:00・早餐 6:30–9:00（實際以各店為準）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 神戶站北口&amp;query_place_id=ChIJu-YjOAiPAGARjBWQSx3PMxU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">神戶塔夜景</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9:00–21:00（最終入場20:30）・門票 展望樓層大人1000円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=神戶塔夜景&amp;query_place_id=ChIJweTiKACPAGARgqyoB9hC7rc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="2">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day2</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">姬路城・大阪初體驗</span>
+            <span class="day-date">2026/9/3（週四）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">麵包超人博物館</span>
+            
+          </div>
+          <div class="stop-note">神戶・門票景點，10:00–17:00（最終入館16:00），需事先購買日期指定門票・門票 1歲以上2,000–2,500円（依日期浮動）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=麵包超人博物館&amp;query_place_id=ChIJZ__NhgCPAGARDaZrej2pwOs" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">姬路護國神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 8:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=姬路護國神社&amp;query_place_id=ChIJuZnmSgTgVDUR5JVrgyo9GYw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">姬路城</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9月為9:00–18:00（最終入城17:00）・門票 一般（18歲以上）2,500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=姬路城&amp;query_place_id=ChIJsyQzogPgVDURsYG6bi-MT3o" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">梅田</span>
+            
+          </div>
+          <div class="stop-note">大阪・購物商場・門票景點</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=梅田&amp;query_place_id=ChIJbyd0kIjmAGAR_crecCbjwlc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 日本橋文樂劇場前</span>
+            
+          </div>
+          <div class="stop-note">入住・訂單號碼：5253885・Check-in 16:00（會員15:00）／Check-out 10:00・早餐 6:30–9:00（實際以各店為準）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 日本橋文樂劇場前&amp;query_place_id=ChIJu9sqV9fnAGAR912Jd-dtz3I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="3">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day3</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">環球影城主題日</span>
+            <span class="day-date">2026/9/4（週五）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">環球影城 USJ</span>
+            
+          </div>
+          <div class="stop-note">門票景點，營業時間依當日公告，9月初約9:00–21:00・門票已購買：門票 TWD$1960／快速通關4 TWD$3320</div>
+          <ul class="stop-details"><li>快速通關4～Minecart &amp; JAWS～・入場日期 2026/9/4（五）</li><li>16:50–17:50 超級任天堂世界 SUPER NINTENDO WORLD 入場時段</li><li>17:20–17:50 瑪利歐賽車：庫巴的挑戰／瘋狂礦車 Mine Cart Madness</li><li>16:50–17:20 瑪利歐賽車：庫巴的挑戰 Mario Kart: Koopa&#x27;s Challenge</li><li>☆選擇 B：飛天翼龍 The Flying Dinosaur 或 哈利波特禁忌之旅（二選一）</li><li>☆選擇 A：侏儸紀公園乘船遊 Jurassic Park - The Ride 或 大白鯊 JAWS（二選一）</li><li>當期活動「ONE PIECE 首映夏日祭 2026」7/30–11/19，哈利活夢幻乘車推出海賊王聯名版本，含在門票內免費體驗</li><li>ONE PIECE 首映秀（付費演出，需另購S/A/B席）18:15開場／18:45開演，約80分，非每日上演，如想看建議提前查詢當週場次並購票</li><li>25週年遊行「NO LIMIT! パレード～Discover U!!!版～」夏季場次 16:15開始，約40分（9/4適用6/29–9/8夏季時段），皮卡丘・瑪利歐・Hello Kitty・史努比・小小兵等角色全員出演，免費觀賞（付費特別鑑賞區2,100円），確切時間仍以出發前約1–1.5週USJ官網公告為準</li></ul>
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=環球影城 USJ&amp;query_place_id=ChIJXeLVg9DgAGARqlIyMCX-BTY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="4">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day4</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">京都神社寺廟巡禮</span>
+            <span class="day-date">2026/9/5（週六）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">伏見稻荷大社</span>
+            
+          </div>
+          <div class="stop-note">授與所 8:00–18:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=伏見稻荷大社&amp;query_place_id=ChIJIW0uPRUPAWAR6eI6dRzKGns" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">吉依卡哇（ちいかわ）專賣店</span>
+            
+          </div>
+          <div class="stop-note">伏見稻荷參道，營業時間 9:30–17:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ちいかわもぐもぐ本舗 京都伏見店&amp;query_place_id=ChIJD_wFlOkPAWARkSAvKJlcbmU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">晴明神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=晴明神社&amp;query_place_id=ChIJUXmPed8HAWAR0BFoGpHqivI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">二條城</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9月為8:00–17:00・門票 入城料800円／含二之丸御殿1,300円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=二條城&amp;query_place_id=ChIJC5srCtQHAWARLy9qkFmHaxA" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">御金神社</span>
+            
+          </div>
+          <div class="stop-note">求財運知名神社，黃金鳥居・授與所 10:00–16:00</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=御金神社&amp;query_place_id=ChIJt15X_IAIAWARh51c3kSmC5g" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">本能寺</span>
+            
+          </div>
+          <div class="stop-note">有時間再去・織田信長歷史遺跡・6:00–17:00</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=本能寺&amp;query_place_id=ChIJAR2bZpIIAWAR5joJ9NbWjR4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">八坂神社</span>
+            <span class="time-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00–12:00</span>
+          </div>
+          <div class="stop-note">和服拍照時段・授與所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=八坂神社&amp;query_place_id=ChIJqewQoHkIAWAR6RokWp3Iesc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">清水寺</span>
+            
+          </div>
+          <div class="stop-note">門票景點，6:00–18:00・門票 大人500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=清水寺&amp;query_place_id=ChIJB_vchdMIAWARujTEUIZlr2I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">京都護國神社</span>
+            
+          </div>
+          <div class="stop-note">社務所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=京都護國神社&amp;query_place_id=ChIJy595gNAIAWARAQmAag8k6zw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">下鴨神社/河合神社</span>
+            
+          </div>
+          <div class="stop-note">河合神社位於下鴨神社境內・授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=下鴨神社&amp;query_place_id=ChIJf438RkAIAWARzM3lfzI7uAM" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">河原町逛街</span>
+            
+          </div>
+          <div class="stop-note">SOUSOU一條街</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=河原町&amp;query_place_id=ChIJDY9Mb5UIAWARWD9g2V4mSUQ" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="5">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day5</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">早起拍照・賦歸</span>
+            <span class="day-date">2026/9/6（週日）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">難波八坂神社</span>
+            <span class="time-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>建議日出前</span>
+          </div>
+          <div class="stop-note">早起拍照・社務所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=難波八坂神社&amp;query_place_id=ChIJQVW9eXLnAGARn-pUdRl0w4A" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 日本橋文樂劇場前</span>
+            
+          </div>
+          <div class="stop-note">Check-out・Airporter 寄送行李</div>
+          
+          <a class="booking-chip" href="https://airporter.co.jp/order/create/order?city=osaka" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg>Airporter 行李寄送預約<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 日本橋文樂劇場前&amp;query_place_id=ChIJu9sqV9fnAGAR912Jd-dtz3I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">大阪護國神社</span>
+            
+          </div>
+          <div class="stop-note">社務所（祈禱・御札授與・朱印）10:30–15:30</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=大阪護國神社&amp;query_place_id=ChIJu3AGuhDdAGARrAodUjPxxT8" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          <div class="stop-note">商店約 10:00 後陸續營業</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">大鳥大社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=大鳥大社&amp;query_place_id=ChIJTZC2jjnbAGAR8mU6R4C1Ziw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-airport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">關西空港 KIX</span>
+            
+          </div>
+          <div class="stop-note">IT213 賦歸・17:50前需抵達並開始排隊報到</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=關西空港 KIX&amp;query_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-docs" class="panel hidden">
+    <div class="card progress-card">
+      <div class="progress-top">
+        <span class="progress-title">準備進度</span>
+        <span class="progress-count"><span id="doc-done">0</span> / 16</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>出發前必備文件</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-0-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">護照正本（效期需 6 個月以上）</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">Visit Japan Web 入境／海關 QR Code</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-2">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">IT210／IT213 機票電子憑證</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-3">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">東橫INN 神戶站北口 訂房確認單</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-4">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">東橫INN 日本橋文樂劇場前 訂房確認單</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-5">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">富邦旅平卡 計畫2／國外300萬</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg><span>行前準備</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-1-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">上網分享器或 eSIM 預訂</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">兌換日幣現金</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-2">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">IC 卡（ICOCA／Suica）或關西周遊券</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-3">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">USJ 快速通關票券（如需要）</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-4">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">和服體驗預約（八坂神社周邊，9/5 10:00–12:00）</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-5">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">常備藥品、轉接頭與行動電源</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>支付與備援</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-2-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">信用卡（確認可海外刷卡、額度足夠）</span>
+          </button>
+          <button class="doc-item" data-id="doc-2-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">現金與卡片分開放置備份</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>緊急聯絡資訊</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-3-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">駐大阪辦事處緊急聯絡電話：090-8794-4568（日本境內直撥，限重大緊急事件）</span>
+          </button>
+          <button class="doc-item" data-id="doc-3-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">富邦產險 SOS 海外緊急救援：+886-2-2563-6292</span>
+          </button></div>
+    </div>
+    <div class="doc-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>此清單為通用建議，實際所需文件請以出發前航空公司與日本入境最新規定為準。</span>
+    </div>
+  </div>
+
+  <div id="panel-shopping" class="panel hidden">
+    <div class="shop-jump-nav">
+      <button class="shop-jump-btn" data-jump="shop-brands-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        購物店家
+      </button>
+      <button class="shop-jump-btn" data-jump="shop-souvenirs-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        伴手禮 TOP 5
+      </button>
+    </div>
+    <div id="shop-brands-section" class="panel">
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>大阪・梅田（大丸梅田／LUCUA／阪急三番街／阪神梅田本店）</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Nintendo OSAKA</div>
+              <div class="shop-item-note">大丸梅田店 13F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Nintendo OSAKA&amp;query_place_id=ChIJlQguMSfnAGARBQISujo7yow" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 大阪梅田店</div>
+              <div class="shop-item-note">阪急三番街南館 B1F・10:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Chiikawa Land Osaka Umeda&amp;query_place_id=ChIJOwETB6HnAGARguAMaM4PyDk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store LUCUA大阪店</div>
+              <div class="shop-item-note">LUCUA 1100・イーレ 5F・10:30–20:30</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Disney Store LUCUA Osaka&amp;query_place_id=ChIJjWZqxo3mAGARIOboBDb1wMg" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">TAKAMI 阪神梅田本店</div>
+              <div class="shop-item-note">C.CUBE 2F・10:00–20:00（週三～週六至21:00）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=C.CUBE Hanshin Umeda&amp;query_place_id=ChIJqW4-u5LmAGARupukHzELXB0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">sanrio house 大阪LUCUA店</div>
+              <div class="shop-item-note">LUCUA 6F・10:30–20:30・西日本首間 sanrio house</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=sanrio house LUCUA Osaka&amp;query_place_id=ChIJhQsDWgDnAGAR7FGGZ4UbARk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... LUCUA大阪店</div>
+              <div class="shop-item-note">LUCUA 8F・10:30–20:30・生活風格選物店（服飾／雜貨／文具）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and LUCUA Osaka&amp;query_place_id=ChIJP5OC8o3mAGARPoSyKxFsxGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>大阪・心齋橋（大丸心齋橋／心齋橋PARCO）</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Pokémon Center OSAKA DX</div>
+              <div class="shop-item-note">大丸心齋橋店本館 9F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon Center Osaka DX&amp;query_place_id=ChIJiZ8OQInnAGART2BGEGqySKk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Sanrio Gallery 心齋橋店</div>
+              <div class="shop-item-note">大丸心齋橋筋店・4層樓西日本最大旗艦店・11:00–20:30</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Sanrio Gallery Shinsaibashi&amp;query_place_id=ChIJLRWhNBHnAGARRKfLJ3rn3dw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">TAKAMI 大丸心齋橋店</div>
+              <div class="shop-item-note">指甲油保養品牌・本館 1F 化妝品賣場・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=TAKAMI Daimaru Shinsaibashi&amp;query_place_id=ChIJacRBBxDnAGARpmKHbR7kWgg" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store 心齋橋PARCO店</div>
+              <div class="shop-item-note">心齋橋PARCO 5F・2026/8/26 新開幕，與吉依卡哇同棟</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋PARCO 大阪市中央区心斎橋筋1-8-3" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 心齋橋PARCO店</div>
+              <div class="shop-item-note">心齋橋PARCO 6F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=CHIIKAWA LAND Shinsaibashi PARCO&amp;query_place_id=ChIJK8bfTADnAGARZt7ZTovTrZw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Onitsuka Tiger 大阪心齋橋</div>
+              <div class="shop-item-note">西日本旗艦店・1F–2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Onitsuka Tiger Osaka Shinsaibashi&amp;query_place_id=ChIJHZAK1RDnAGARrSsWqlpdars" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">ASICS OSAKA SHINSAIBASHI</div>
+              <div class="shop-item-note">1F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ASICS Osaka Shinsaibashi&amp;query_place_id=ChIJE0F1JxHnAGARp2gpTuFLvhE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... なんばパークス店</div>
+              <div class="shop-item-note">なんばパークス 4F・11:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Namba Parks&amp;query_place_id=ChIJy5nrRWnnAGARHeK4cttHK38" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>神戶・三宮</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Onitsuka Tiger 神戶</div>
+              <div class="shop-item-note">關西旗艦店・1F–2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Onitsuka Tiger Kobe&amp;query_place_id=ChIJR6uj1fuOAGARDgawAJRnOe0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... 神戶Harborland店</div>
+              <div class="shop-item-note">umie NORTHMALL 1F・10:00–20:00・距三宮約1站/步行15分，非順路需另安排</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Kobe Harborland umie&amp;query_place_id=ChIJH_YHdEaPAGARsjOivsDCmqQ" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>京都・四条河原町</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Nintendo KYOTO</div>
+              <div class="shop-item-note">京都髙島屋S.C. T8 7F・10:30–20:00・全國第3間任天堂直營店</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Nintendo KYOTO&amp;query_place_id=ChIJ3dxPvegJAWARjuprBYA4hJE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Pokémon Center KYOTO</div>
+              <div class="shop-item-note">京都經濟中心 SUINA室町 2F・10:00–20:00・京都限定舞妓皮卡丘</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon Center Kyoto&amp;query_place_id=ChIJVVVVVZQIAWARUox_Y6uZHzw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 京都四条河原町店</div>
+              <div class="shop-item-note">京都四条河原町店 3F・11:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Chiikawa Land Kyoto Shijo Kawaramachi&amp;query_place_id=ChIJl1gmpGMJAWAR-8kzHhcnlm4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store 京都四条河原町店</div>
+              <div class="shop-item-note">コトクロス阪急河原町 1&amp;2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Disney Store Kyoto Shijo Kawaramachi&amp;query_place_id=ChIJfxyqbJUIAWARSsRO3t8vxpU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... 京都寺町店</div>
+              <div class="shop-item-note">寺町通蛸薬師 1–3F・11:00–20:00・1F咖啡／2F男裝雜貨／3F女裝</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Kyoto Teramachi&amp;query_place_id=ChIJZ2U2kD8JAWARF41ijhS1-nw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>京都・伏見</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇（ちいかわもぐもぐ本舗）京都伏見店</div>
+              <div class="shop-item-note">伏見稻荷參道・9:30–17:30（行程 Day4 已排入）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ちいかわもぐもぐ本舗 京都伏見店&amp;query_place_id=ChIJD_wFlOkPAWARkSAvKJlcbmU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    </div>
+    <div id="shop-souvenirs-section" class="section-divider"><span>伴手禮 TOP 5</span></div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">京都</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=京都駅&amp;query_place_id=ChIJ7wKLka4IAWARCByidG5EGrY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>京都駅（京すいーつ小径／伴手禮專區）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">阿闍梨餅（滿月）</div>
+              <div class="shop-item-note">半生菓子，比叡山修行僧斗笠造型，紅豆粒餡配Q彈餅皮</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">生八ツ橋（聖護院／井筒八ッ橋本舗）</div>
+              <div class="shop-item-note">京都最具代表性的傳統點心，肉桂香氣＋軟Q外皮，多種內餡口味</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">京ばあむ（美十）</div>
+              <div class="shop-item-note">宇治抹茶＋豆乳年輪蛋糕，抹茶漸層外觀好拍</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">伊藤久右衛門 宇治抹茶系列</div>
+              <div class="shop-item-note">抹茶控必買，濃茶粉、抹茶可可、抹茶甜點齊全</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">鼓月 千寿せんべい</div>
+              <div class="shop-item-note">波浪造型煎餅夾奶油餡，酥脆香甜、送禮大方</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">大阪</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=難波駅&amp;query_place_id=ChIJFXXzNhPnAGARUifDEqMzXl4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>難波（551蓬萊本店／りくろーおじさん本店一帶）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">551蓬萊 豚まん</div>
+              <div class="shop-item-note">大阪代表美食，多汁豬肉包，一天可賣出約17萬個</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">りくろーおじさん 現烤起司蛋糕</div>
+              <div class="shop-item-note">入口即化的輕盈口感，底部葡萄乾提味，難波本店常大排長龍</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">堂島ロール（Mon cher）</div>
+              <div class="shop-item-note">濕潤鮮奶油蛋糕捲，大阪甜點代表之一</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">面白い恋人（吉本興業）</div>
+              <div class="shop-item-note">「白い恋人」的搞笑山寨版大阪伴手禮，話題性十足</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">大阪限定 Calbee+／じゃがりこ たこ焼き味</div>
+              <div class="shop-item-note">大阪限定口味餅乾零食，個包裝適合分送同事朋友</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">神戶</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=元町駅&amp;query_place_id=ChIJFyYemvKFAGARXfpsr2THmv8" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>元町（神戶風月堂／モロゾフ／ユーハイム本店一帶）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">モロゾフ 布丁／巧克力</div>
+              <div class="shop-item-note">1931年神戶トアロード起家的洋菓子老店，經典卡士達布丁</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">神戶風月堂 ゴーフル</div>
+              <div class="shop-item-note">薄脆法式煎餅夾奶油餡，1927年至今的神戶伴手禮代表</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">神戶布丁（トーラク）</div>
+              <div class="shop-item-note">濃郁滑順帶微苦焦糖香，車站超商就買得到</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">ユーハイム 年輪蛋糕</div>
+              <div class="shop-item-note">日本第一家做年輪蛋糕的德式洋菓子店，元町本店限定品項多</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">觀音屋 丹麥起司蛋糕</div>
+              <div class="shop-item-note">北野／元町一帶排隊名店，起司控必買</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="doc-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>部分店鋪（如 Nintendo OSAKA、Onitsuka Tiger 大阪心齋橋）人潮多時會發放整理券，建議一開店就前往或先查詢當日公告。</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    <span>行程僅供參考，實際交通時間與景點開放時間請於出發前再次確認</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="flight">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg>
+    航班
+  </button>
+  <button class="tab-btn" data-tab="itinerary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></svg>
+    行程
+  </button>
+  <button class="tab-btn" data-tab="shopping">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    必買
+  </button>
+  <button class="tab-btn" data-tab="docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+    文件
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.add('hidden'); });
+      var target = document.getElementById('panel-' + btn.getAttribute('data-tab'));
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  document.querySelectorAll('.day-sel-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var day = btn.getAttribute('data-day');
+      document.querySelectorAll('.day-sel-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.day-panel').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-day') === day);
+      });
+    });
+  });
+
+  function updateProgress() {
+    var all = document.querySelectorAll('.doc-item');
+    var done = document.querySelectorAll('.doc-item.checked');
+    var fill = document.getElementById('progress-fill');
+    var doneCount = document.getElementById('doc-done');
+    if (fill) fill.style.width = (all.length ? (done.length / all.length * 100) : 0) + '%';
+    if (doneCount) doneCount.textContent = done.length;
+  }
+
+  document.querySelectorAll('.doc-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      item.classList.toggle('checked');
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+
+  document.querySelectorAll('.shop-jump-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = document.getElementById(btn.getAttribute('data-jump'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
