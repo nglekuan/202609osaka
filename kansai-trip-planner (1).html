@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>神戶・姬路・大阪・京都 五日旅行</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+  :root {
+    --ink: #173A5E;
+    --paper: #F5EFDD;
+    --surface: #FFFDF6;
+    --seal: #E0472B;
+    --matcha: #2C8C77;
+    --line: #E3D6AE;
+    --gold: #F2A93C;
+    --muted: #8C8368;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; min-height: 100%;
+    background-color: var(--paper);
+    background-image: radial-gradient(rgba(23,58,94,0.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', sans-serif;
+    color: var(--ink);
+  }
+  .serif { font-family: 'Shippori Mincho', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
+
+  .header {
+    position: relative; overflow: hidden; border-radius: 16px; padding: 20px;
+    color: var(--paper);
+    background: radial-gradient(circle at 88% -20%, rgba(242,169,60,0.4), transparent 45%), linear-gradient(135deg, var(--ink) 0%, #0E273F 100%);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .header .kanji-wm {
+    position: absolute; right: -6px; top: -22px; font-size: 108px; font-weight: 700;
+    color: var(--paper); opacity: 0.08; line-height: 1; pointer-events: none;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; position: relative; }
+  .header-left svg { width: 22px; height: 22px; color: var(--seal); flex-shrink: 0; }
+  .header-route { font-size: 13px; letter-spacing: 0.08em; }
+  .header-title { font-size: 20px; font-weight: 700; margin-top: 2px; }
+  .header-right { text-align: right; position: relative; }
+  .header-dates { font-size: 14px; }
+  .header-sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+  .seigaiha {
+    height: 18px; margin: 12px 0; border-radius: 6px; opacity: 0.55;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(circle at 100% 150%, var(--paper) 24%, var(--ink) 25%, var(--ink) 28%, var(--paper) 29%, var(--paper) 36%, var(--ink) 37%, var(--ink) 40%, transparent 41%),
+      radial-gradient(circle at 0 150%, var(--paper) 24%, var(--ink) 25%, var(--ink) 28%, var(--paper) 29%, var(--paper) 36%, var(--ink) 37%, var(--ink) 40%, transparent 41%),
+      radial-gradient(circle at 50% 100%, var(--paper) 10%, var(--ink) 11%, var(--ink) 23%, var(--paper) 24%, var(--paper) 30%, var(--ink) 31%, var(--ink) 43%, transparent 44%);
+    background-size: 30px 15px;
+  }
+
+  /* day selector */
+  .day-selector {
+    display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .day-selector::-webkit-scrollbar { display: none; }
+  .day-sel-btn {
+    flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 56px; height: 64px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface);
+    color: var(--ink); cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+  }
+  .day-sel-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-top: 2px; }
+  .day-sel-week { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .day-sel-btn.active {
+    background: var(--ink); border-color: var(--ink); color: var(--paper);
+  }
+  .day-sel-btn.active .day-sel-week { color: var(--paper); opacity: 0.7; }
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .panel { display: flex; flex-direction: column; gap: 20px; }
+  .sub-panel { display: flex; flex-direction: column; gap: 20px; }
+  .panel.hidden { display: none; }
+  .hidden { display: none !important; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .section-head { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 12px; flex-wrap: wrap; }
+  .section-head svg { width: 16px; height: 16px; color: var(--seal); }
+
+  /* full trip button */
+  .full-trip-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 16px; border-radius: 16px; background: var(--seal); color: var(--paper);
+    font-weight: 700; font-size: 15px; text-decoration: none;
+  }
+  .full-trip-btn svg { width: 16px; height: 16px; }
+
+  /* day card */
+  .day-card { display: flex; gap: 12px; border-left: 4px solid var(--seal); }
+  .hanko-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+  .hanko {
+    width: 60px; height: 60px; border-radius: 999px; border: 2.5px solid var(--seal); color: var(--seal);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transform: rotate(-4deg); background: rgba(224,71,43,0.05);
+    box-shadow: 0 0 0 3px var(--paper), inset 0 0 0 3px rgba(224,71,43,0.13);
+  }
+  .hanko-kanji { font-size: 14px; line-height: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.02em; }
+  .hanko-line { width: 1px; flex: 1; background: var(--line); }
+  .day-body { flex: 1; min-width: 0; }
+  .day-title-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .day-title { font-family: 'Shippori Mincho', serif; font-size: 20px; font-weight: 700; }
+  .day-date {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--matcha);
+    background: #E1F0E8; padding: 2px 8px; border-radius: 999px;
+  }
+  .stop-list { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .stop-row { display: flex; align-items: flex-start; gap: 8px; }
+  .stop-icon {
+    width: 18px; height: 18px; border-radius: 999px; background: var(--paper);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .stop-icon svg { width: 10px; height: 10px; }
+  .k-spot { color: var(--matcha); }
+  .k-hotel { color: var(--gold); }
+  .k-shop { color: var(--seal); }
+  .k-airport { color: var(--ink); }
+  .k-shrine { color: var(--seal); }
+  .k-transit { color: var(--muted); }
+  .transit-strip {
+    padding: 8px 12px; border-radius: 8px; border: 1px dashed var(--line);
+  }
+  .transit-strip-text { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+  .transit-strip-name { color: var(--ink); font-weight: 600; font-size: 13px; }
+  .tsn-red { color: var(--seal); }
+  .transit-strip-note { color: var(--muted); font-size: 11.5px; margin-top: 2px; white-space: pre-line; }
+  .transit-strip-link {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 4px 8px; border-radius: 8px;
+    background: #E1F0E8; border: 1px solid var(--line); color: var(--matcha); font-size: 11px; text-decoration: none;
+  }
+  .transit-strip-link svg { width: 11px; height: 11px; }
+  .stop-body { flex: 1; min-width: 0; }
+  .stop-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .stop-name { font-size: 14px; }
+  .time-chip {
+    display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--seal);
+    background: #FBE0D3; padding: 1px 6px; border-radius: 999px;
+  }
+  .time-chip svg { width: 10px; height: 10px; }
+  .stop-note { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .inline-highlight { color: var(--seal); font-weight: 700; background: #FBE0D3; border-radius: 4px; padding: 1px 3px; }
+  .stop-details { margin: 6px 0 0; padding-left: 16px; list-style: disc; display: flex; flex-direction: column; gap: 4px; }
+  .stop-details li { font-size: 11.5px; color: var(--ink); line-height: 1.5; }
+  .stop-details li.li-highlight {
+    color: var(--seal); font-weight: 700; background: #FBE0D3; border-radius: 6px;
+    padding: 3px 6px 3px 2px; margin-left: -2px; list-style-type: none;
+  }
+  .map-chip {
+    display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; padding: 2px 8px; border-radius: 999px;
+    background: #E1F0E8; color: var(--matcha); font-size: 11px; text-decoration: none; margin-top: 1px;
+  }
+  .map-chip svg { width: 11px; height: 11px; }
+  .booking-chip {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; padding: 3px 8px; border-radius: 8px;
+    background: #FCEFC9; border: 1px solid var(--line); color: #8A5A16; font-size: 11px; text-decoration: none;
+  }
+  .booking-chip2 {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; padding: 3px 8px; border-radius: 8px;
+    background: #E1F0E8; border: 1px solid var(--line); color: var(--matcha); font-size: 11px; text-decoration: none;
+  }
+  .booking-chip.block-chip { display: flex; width: fit-content; }
+  .booking-chip2.block-chip { display: flex; width: fit-content; }
+  .booking-chip2 svg { width: 11px; height: 11px; }
+  .booking-chip svg { width: 11px; height: 11px; }
+  .link-note { font-size: 11px; color: #8A5A16; margin-top: 3px; }
+  .link2-note { font-size: 11px; color: var(--matcha); margin-top: 8px; }
+
+  /* flight card */
+  .flight-row { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 12px; background: var(--paper); margin-bottom: 12px; }
+  .flight-row:last-child { margin-bottom: 0; }
+  .flight-row-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
+  .flight-label { font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 700; color: var(--matcha); }
+  .flight-code { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .flight-route { font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+  .seal-arrow { color: var(--seal); }
+  .flight-time { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; }
+  .flight-note { font-size: 11px; color: var(--muted); }
+  .flight-details { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; padding-top: 6px; border-top: 1px dashed var(--line); }
+  .flight-details div { font-size: 11.5px; color: var(--ink); }
+  .flight-tip {
+    display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 12px;
+    background: #FCEFC9; border: 1px dashed var(--line); font-size: 12.5px; line-height: 1.6;
+  }
+  .flight-tip svg { width: 15px; height: 15px; color: var(--seal); flex-shrink: 0; margin-top: 2px; }
+
+  /* docs */
+  .progress-card { display: flex; flex-direction: column; gap: 8px; }
+  .progress-top { display: flex; align-items: center; justify-content: space-between; }
+  .progress-title { font-family: 'Shippori Mincho', serif; font-size: 16px; font-weight: 700; }
+  .progress-count { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--matcha); }
+  .progress-track { height: 8px; border-radius: 999px; background: var(--paper); overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--seal); width: 0%; transition: width .3s; }
+  .doc-list { display: flex; flex-direction: column; gap: 4px; }
+  .doc-item {
+    display: flex; align-items: center; gap: 8px; text-align: left; padding: 6px 8px; border-radius: 8px;
+    background: none; border: none; cursor: pointer; font-size: 14px; color: var(--ink); font-family: inherit;
+  }
+  .doc-item svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .doc-check { display: block; color: var(--line); }
+  .doc-check-on { display: none; color: var(--matcha); }
+  .doc-item.checked .doc-check { display: none; }
+  .doc-item.checked .doc-check-on { display: block; }
+  .doc-item.checked .doc-label { color: #B3A987; text-decoration: line-through; }
+  .doc-note {
+    display: flex; align-items: flex-start; gap: 8px; padding: 14px; border-radius: 12px;
+    background: #FCEFC9; border: 1px dashed var(--line); font-size: 12.5px; line-height: 1.6;
+  }
+  .doc-note svg { width: 15px; height: 15px; color: var(--seal); flex-shrink: 0; margin-top: 2px; }
+
+  /* procurement */
+  .proc-toolbar { display: flex; gap: 8px; margin-bottom: 8px; }
+  .proc-toolbar:last-of-type { margin-bottom: 0; }
+  .proc-add-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 11px 12px; border-radius: 12px; background: var(--seal); color: var(--paper);
+    font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+  }
+  .proc-add-btn svg { width: 16px; height: 16px; }
+  .proc-filter-select {
+    padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface);
+    color: var(--ink); font-size: 13px; font-weight: 600; font-family: inherit;
+  }
+  .proc-filter-flex { flex: 1; min-width: 0; }
+  .proc-form-title { font-family: 'Shippori Mincho', serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .proc-form { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .proc-field { display: flex; flex-direction: column; gap: 4px; }
+  .proc-field > span { font-size: 11px; color: var(--muted); }
+  .proc-field input[type="text"], .proc-field input[type="number"] {
+    padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper);
+    font-size: 14px; color: var(--ink); font-family: inherit; width: 100%; box-sizing: border-box;
+  }
+  .proc-row { display: flex; gap: 8px; }
+  .proc-checkbox-row { display: flex; align-items: center; gap: 16px; }
+  .proc-checkbox-field { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .proc-checkbox-field input { width: 16px; height: 16px; accent-color: var(--matcha); }
+  .proc-checkbox-notfound input { accent-color: var(--seal); }
+  .proc-checkbox-field span { font-size: 13px; color: var(--ink); }
+  .proc-cat-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .proc-cat-btn {
+    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    background: var(--paper); color: var(--ink); border: 1px solid var(--line); cursor: pointer; font-family: inherit;
+  }
+  .proc-cat-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .proc-photo-row { display: flex; align-items: center; gap: 12px; position: relative; }
+  .proc-photo-preview { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+  .proc-photo-remove {
+    position: absolute; top: -6px; left: 58px; width: 18px; height: 18px; border-radius: 999px;
+    background: var(--seal); color: var(--paper); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .proc-photo-remove svg { width: 11px; height: 11px; }
+  .proc-photo-btn {
+    display: flex; align-items: center; justify-content: center; width: 64px; height: 64px;
+    border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); cursor: pointer;
+  }
+  .proc-photo-btn svg { width: 20px; height: 20px; }
+  .proc-form-actions { display: flex; gap: 8px; margin-top: 2px; }
+  .proc-save-btn {
+    flex: 1; padding: 9px; border-radius: 10px; background: var(--seal); color: var(--paper);
+    font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+  }
+  .proc-cancel-btn {
+    padding: 9px 16px; border-radius: 10px; background: var(--paper); color: var(--ink);
+    font-size: 14px; border: 1px solid var(--line); cursor: pointer; font-family: inherit;
+  }
+  .proc-summary {
+    display: flex; align-items: center; justify-content: space-between; padding: 0 4px;
+    font-size: 12px; color: var(--muted);
+  }
+  .proc-summary-total { color: var(--seal); font-weight: 700; }
+  .proc-empty {
+    padding: 24px; border-radius: 16px; text-align: center; background: var(--surface);
+    border: 1px dashed var(--line); color: var(--muted); font-size: 13px;
+  }
+  .proc-cat-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+  .proc-cat-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .proc-cat-head svg { width: 16px; height: 16px; color: var(--seal); }
+  .proc-cat-title { font-family: 'Shippori Mincho', serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .proc-cat-count { font-size: 11px; color: var(--muted); }
+  .proc-item-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .proc-item-row:last-child { margin-bottom: 0; }
+  .proc-item-toggle-group { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; margin-top: 2px; }
+  .proc-item-toggle { flex-shrink: 0; background: none; border: none; padding: 0; cursor: pointer; color: var(--line); }
+  .proc-item-toggle svg { width: 17px; height: 17px; }
+  .proc-item-toggle.purchased { color: var(--matcha); }
+  .proc-item-toggle.notfound { color: var(--seal); }
+  .proc-item-name-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .proc-item-tag { font-size: 10px; color: var(--seal); background: #FBE0D3; padding: 1px 6px; border-radius: 999px; font-weight: 700; }
+  .proc-item-photo { width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); flex-shrink: 0; }
+  .proc-item-photo-placeholder {
+    width: 44px; height: 44px; border-radius: 8px; background: var(--paper); color: #B3A987;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .proc-item-photo-placeholder svg { width: 16px; height: 16px; }
+  .proc-item-body.purchased { opacity: 0.55; }
+  .proc-item-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .proc-item-name.purchased { text-decoration: line-through; }
+  .proc-item-meta { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .proc-item-note { font-size: 11.5px; color: var(--matcha); margin-top: 1px; }
+  .proc-item-edit, .proc-item-delete { flex-shrink: 0; padding: 6px; border-radius: 8px; background: none; border: none; color: #8C8368; cursor: pointer; }
+  .proc-item-delete { color: #B3A987; }
+  .proc-item-edit svg, .proc-item-delete svg { width: 14px; height: 14px; }
+  .proc-backup-row { display: flex; gap: 8px; }
+  .proc-backup-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .proc-backup-btn svg { width: 13px; height: 13px; }
+  .proc-item-photo, .proc-item-photo-placeholder { cursor: pointer; }
+  .proc-lightbox {
+    position: fixed; inset: 0; background: rgba(23,58,94,0.85); z-index: 200;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .proc-lightbox img { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+  .proc-lightbox-close {
+    position: fixed; top: 20px; right: 20px; width: 36px; height: 36px; border-radius: 999px;
+    background: rgba(255,255,255,0.15); color: var(--paper); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .proc-lightbox-close svg { width: 20px; height: 20px; }
+  .proc-confirm-overlay {
+    position: fixed; inset: 0; background: rgba(23,58,94,0.6); z-index: 200;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+  }
+  .proc-confirm-box {
+    background: var(--surface); border-radius: 16px; padding: 20px; max-width: 320px; width: 100%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 12px;
+  }
+  .proc-confirm-title { font-family: 'Shippori Mincho', serif; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .proc-confirm-text { font-size: 13px; color: var(--muted); }
+  .proc-confirm-actions { display: flex; gap: 8px; }
+  .proc-confirm-delete-btn {
+    flex: 1; padding: 9px; border-radius: 10px; background: var(--seal); color: var(--paper);
+    font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+  }
+  .proc-confirm-cancel-btn {
+    padding: 9px 16px; border-radius: 10px; background: var(--paper); color: var(--ink);
+    font-size: 14px; border: 1px solid var(--line); cursor: pointer; font-family: inherit;
+  }
+  .proc-export-excel-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 11px 12px; border-radius: 12px; background: var(--matcha); color: var(--paper);
+    font-size: 13.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+  }
+  .proc-export-excel-btn svg { width: 14px; height: 14px; }
+
+  /* shopping */
+  .shop-list { display: flex; flex-direction: column; gap: 12px; }
+  .shop-item-row { display: flex; align-items: flex-start; gap: 10px; }
+  .shop-item-body { flex: 1; min-width: 0; }
+  .shop-item-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .shop-item-note { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .section-divider {
+    display: flex; align-items: center; gap: 10px; margin-top: 4px;
+    font-family: 'Shippori Mincho', serif; font-size: 15px; font-weight: 700; color: var(--ink);
+  }
+  .section-divider::before, .section-divider::after {
+    content: ""; height: 1px; flex: 1; background: var(--line);
+  }
+  .shop-jump-nav { display: flex; gap: 8px; margin-bottom: 20px; }
+  .shop-jump-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
+    color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .shop-jump-btn svg { width: 14px; height: 14px; color: var(--seal); }
+  .souvenir-item-row { display: flex; align-items: flex-start; gap: 10px; }
+  .souvenir-rank {
+    width: 20px; height: 20px; border-radius: 999px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(224,71,43,0.1); color: var(--seal); font-size: 11px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .footer-note {
+    display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 0 0;
+    color: var(--muted); font-size: 11px; text-align: center;
+  }
+  .footer-note svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  /* bottom nav */
+  .tabs {
+    position: fixed; bottom: 16px; left: 16px; right: 16px; margin: 0 auto; max-width: 420px;
+    display: flex; gap: 4px; padding: 8px; border-radius: 24px; background: var(--surface);
+    border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(23,58,94,0.18); z-index: 50;
+  }
+  .tab-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 8px 0; border: none; background: transparent; border-radius: 16px; cursor: pointer;
+    font-family: 'Shippori Mincho', serif; font-weight: 700; font-size: 11px; color: #A79A78;
+  }
+  .tab-btn svg { width: 18px; height: 18px; color: #A79A78; }
+  .tab-btn.active { background: var(--ink); color: var(--paper); }
+  .tab-btn.active svg { color: var(--seal); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="kanji-wm serif">夏</span>
+    <div class="header-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg>
+      <div>
+        <div class="header-route mono">TPE 台灣桃園 ✈ KIX 關西機場</div>
+        <div class="header-title serif">神戶・姬路・大阪・京都 五日旅行</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-dates mono">2026.09.02 → 09.06</div>
+      <div class="header-sub">5 日 4 夜</div>
+    </div>
+  </div>
+
+  <div class="seigaiha"></div>
+
+  <div id="panel-flight" class="panel">
+    
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg><span>阿關&amp;翊榛 航班資訊</span><span class="time-chip" style="color: var(--seal); background: #FBE0D3;">PNR: N2SGUL</span></div>
+      
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">去程</span>
+              <span class="flight-code">IT210 ・ 2026/09/02（三）</span>
+            </div>
+            <div class="flight-route">TPE 台灣桃園 T1・7 號櫃台 <span class="seal-arrow">→</span> KIX 關西機場</div>
+            <div class="flight-time">06:40 → 10:25</div>
+            
+            <div class="flight-details">
+              <div>乘客1：託運行李 15公斤・座位 1F・優先行李</div>
+              <div>乘客2：無託運行李・座位 1E</div>
+            </div>
+          </div>
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">回程</span>
+              <span class="flight-code">IT213 ・ 2026/09/06（日）</span>
+            </div>
+            <div class="flight-route">KIX 關西機場 T1・4F <span class="seal-arrow">→</span> TPE 台灣桃園 T1</div>
+            <div class="flight-time">19:50 → 21:45</div>
+            <div class="flight-note">※ 通常為 F 櫃台，依現場螢幕為準</div>
+            <div class="flight-details">
+              <div>乘客1：託運行李 25公斤・座位 6A・優先行李</div>
+              <div>乘客2：託運行李 20公斤・座位 6B・優先行李</div>
+            </div>
+          </div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg><span>莉亞＆莉莉 航班資訊</span></div>
+      
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">去程</span>
+              <span class="flight-code">BR178 ・ 2026/09/02（三）</span>
+            </div>
+            <div class="flight-route">TPE 台灣桃園 <span class="seal-arrow">→</span> KIX 關西機場</div>
+            <div class="flight-time">06:30 → 10:10</div>
+            
+          </div>
+          <div class="flight-row">
+            <div class="flight-row-top">
+              <span class="flight-label">回程</span>
+              <span class="flight-code">BR129 ・ 2026/09/07（一）</span>
+            </div>
+            <div class="flight-route">KIX 關西機場 <span class="seal-arrow">→</span> TPE 台灣桃園</div>
+            <div class="flight-time">18:30 → 20:30</div>
+            
+          </div>
+    </div>
+    <div class="flight-tip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>建議提早 2.5–3 小時抵達機場辦理報到與行李托運，實際登機門與櫃台請以現場螢幕顯示為準。</span>
+    </div>
+  </div>
+
+  <div id="panel-itinerary" class="panel hidden">
+    <div class="day-selector">
+        <button class="day-sel-btn active" data-day="1">
+          <span class="day-sel-date">9/2</span>
+          <span class="day-sel-week">週三</span>
+        </button>
+        <button class="day-sel-btn " data-day="2">
+          <span class="day-sel-date">9/3</span>
+          <span class="day-sel-week">週四</span>
+        </button>
+        <button class="day-sel-btn " data-day="3">
+          <span class="day-sel-date">9/4</span>
+          <span class="day-sel-week">週五</span>
+        </button>
+        <button class="day-sel-btn " data-day="4">
+          <span class="day-sel-date">9/5</span>
+          <span class="day-sel-week">週六</span>
+        </button>
+        <button class="day-sel-btn " data-day="5">
+          <span class="day-sel-date">9/6</span>
+          <span class="day-sel-week">週日</span>
+        </button></div>
+    <div class="day-panel active" data-day="1">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day1</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">神戶</span>
+            <span class="day-date">2026/9/2（週三）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-airport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">關西空港 KIX</span>
+            
+          </div>
+          <div class="stop-note">班機抵達，<span class="inline-highlight">直接於T1 2樓航廈往南海電鐵聯通口的n.e.s.t會合寄行李</span>，再下一樓搭巴士前往神戶三宮</div>
+          <a class="booking-chip block-chip" href="https://sites.google.com/airporter.co.jp/howtouse/nestcounter" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>n.e.s.t counter 位置<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          <a class="booking-chip" href="https://airporter.co.jp/order/create/order/?city=osaka&amp;spotId=4067&amp;ref=NEST" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg>Airporter 行李寄送預約<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          <div class="link-note">關已預約，預約編號：NEST-9335</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=關西空港 KIX&amp;query_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">巴士 <u>關西空港</u>→<u>神戶三宮</u></div>
+          <div class="transit-strip-note">在T1 1F 6號站牌・¥2200（不確定是否可使用IC卡，可直接機台現金購票）</div>
+        </div>
+        <a class="transit-strip-link" href="https://www.kate.co.jp/tcn/timetable/detail/KB" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></svg>
+          往神戶三宮巴士時間
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">神戶三宮</span>
+            
+          </div>
+          <div class="stop-note">抵達市區・午餐 神戶牛・預計去神戸牛ステーキ 桜 用餐</div>
+          <a class="booking-chip" href="https://www.google.com/maps/reserve/dine?c=_xfgMuWH_Nw&amp;ssst=2026-09-02T04%3A00%3A00.000Z&amp;ld=20260902T130000&amp;ps=4&amp;ahbb=1&amp;gei=wbGOaoXYC47e2roPwdDH8Qk&amp;hl=zh-TW&amp;opi=79508299&amp;source=pa&amp;sourceurl=https%3A%2F%2Fwww.google.com%2Fmaps%2Fpreview%2Fplace%3Fhl%3Dzh-TW%26gl%3Dtw%26authuser%3D0%26pb%3D!1m17!1s0x60008feef7587bfb%3A0xbc5807aa82655eb8!3m12!1m3!1d6544.475347327871!2d135.19605769980572!3d34.69158704726401!2m3!1f0!2f0!3f0!3m2!1i1032!2i911!4f13.1!4m2!3d34.69428676128531!4d135.18992722034454!12m4!2m3!1i360!2i120!4i8!13m57!2m2!1i203!2i100!3m2!2i4!5b1!6m6!1m2!1i86!2i86!1m2!1i408!2i240!7m33!1m3!1e1!2b0!3e3!1m3!1e2!2b1!3e2!1m3!1e2!2b0!3e3!1m3!1e8!2b0!3e3!1m3!1e10!2b0!3e3!1m3!1e10!2b1!3e2!1m3!1e10!2b0!3e4!1m3!1e9!2b1!3e2!2b1!9b0!15m8!1m7!1m2!1m1!1e2!2m2!1i195!2i195!3i20!14m2!1skauOaszeG7SM2roPhpyNiAw!7e81!15m111!1m29!4e2!13m9!2b1!3b1!4b1!6i1!8b1!9b1!14b1!20b1!25b1!18m17!3b1!4b1!5b1!6b1!9b1!13b1!14b1!17b1!20b1!21b1!22b1!30b1!32b1!33m1!1b1!34b1!36e2!10m1!8e3!11m1!3e1!17b1!20m2!1e3!1e6!24b1!25b1!26b1!27b1!29b1!30m1!2b1!36b1!37b1!39m3!2m2!2i1!3i1!43b1!52b1!54m1!1b1!55b1!56m1!1b1!61m2!1m1!1e1!65m5!3m4!1m3!1m2!1i224!2i298!72m22!1m8!2b1!5b1!7b1!12m4!1b1!2b1!4m1!1e1!4b1!8m10!1m6!4m1!1e1!4m1!1e3!4m1!1e4!3sother_user_google_review_posts__and__hotel_and_vr_partner_review_posts!6m1!1e1!9b1!89b1!90m2!1m1!1e2!98m3!1b1!2b1!3b1!103b1!113b1!114m3!1b1!2m1!1b1!117b1!122m1!1b1!126b1!127b1!128m1!1b1!21m0!22m2!1e81!8e1!29m0!30m6!3b1!6m1!2b1!7m1!2b1!9b1!34m5!7b1!10b1!14b1!15m1!1b0!37i792!39z56We5oi454mb44K544OG44O844KtIOahnA%26q%3D%25E7%25A5%259E%25E6%2588%25B8%25E7%2589%259B%25E3%2582%25B9%25E3%2583%2586%25E3%2583%25BC%25E3%2582%25AD%2B%25E6%25A1%259C" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg>訂位網站<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=神戶三宮" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">生田神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=生田神社&amp;query_place_id=ChIJweCflOOOAGARSAhXB35rPCY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">北野天滿神社</span>
+            
+          </div>
+          <div class="stop-note">社務所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=北野天滿神社&amp;query_place_id=ChIJVVWpVt6OAGARONPs0K8XI4Q" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">北野異人館</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9:00–17:00・門票 大人500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=北野異人館&amp;query_place_id=ChIJT6cViuCOAGARegX_ORkvbs0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">JR <u>三ノ宮</u>→<u>神戶</u></div>
+          <div class="transit-strip-note">約五分鐘一班車・車程3–4分鐘・車資150円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 神戶站北口</span>
+            
+          </div>
+          <div class="stop-note">入住・Check-in 16:00（會員15:00）／Check-out 10:00・早餐 6:30–9:00（實際以各店為準）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 神戶站北口&amp;query_place_id=ChIJu-YjOAiPAGARjBWQSx3PMxU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">神戶塔、美利堅公園夜景</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9:00–21:00（最終入場20:30）・門票 展望樓層大人1000円・依體力決定是否前往</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=神戶塔夜景&amp;query_place_id=ChIJweTiKACPAGARgqyoB9hC7rc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="2">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day2</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">姬路城・大阪</span>
+            <span class="day-date">2026/9/3（週四）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 神戶站北口</span>
+            
+          </div>
+          <div class="stop-note"><span class="inline-highlight">預計9:30退房步行前往景點</span></div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 神戶站北口&amp;query_place_id=ChIJu-YjOAiPAGARjBWQSx3PMxU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">麵包超人博物館</span>
+            
+          </div>
+          <div class="stop-note">神戶・門票景點，10:00–17:00（最終入館16:00），需事先購買日期指定門票・門票 1歲以上2,000–2,500円（依日期浮動）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=麵包超人博物館&amp;query_place_id=ChIJZ__NhgCPAGARDaZrej2pwOs" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">JR神戶線新快速 <u>神戶</u>→<u>姬路</u></div>
+          <div class="transit-strip-note">預計搭乘 11:40／11:55／12:10／12:25／12:40 班次・車程37分鐘・車資960円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">姬路護國神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 8:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=姬路護國神社&amp;query_place_id=ChIJuZnmSgTgVDUR5JVrgyo9GYw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">姬路城</span>
+            
+          </div>
+          <div class="stop-note">門票景點，9月為9:00–18:00（最終入城17:00）・門票 一般（18歲以上）2,500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=姬路城&amp;query_place_id=ChIJsyQzogPgVDURsYG6bi-MT3o" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">JR神戶線新快速 <u>姬路</u>→<u>大阪</u></div>
+          <div class="transit-strip-note">預計搭乘 17:11／17:26／17:41／17:56 班次・車程1小時10分・車資1460円・也可搭新幹線，車程差不多，車資約兩倍</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">梅田</span>
+            
+          </div>
+          <div class="stop-note">大阪・購物商場・門票景點</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=梅田&amp;query_place_id=ChIJbyd0kIjmAGAR_crecCbjwlc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 日本橋文樂劇場前</span>
+            
+          </div>
+          <div class="stop-note">入住・Check-in 16:00（會員15:00）／Check-out 10:00・早餐 6:30–9:00（實際以各店為準）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 日本橋文樂劇場前&amp;query_place_id=ChIJu9sqV9fnAGAR912Jd-dtz3I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="3">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day3</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">環球影城</span>
+            <span class="day-date">2026/9/4（週五）</span>
+          </div>
+          <div class="stop-list">
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">近鉄奈良線快速急行 <u>近鉄日本橋</u>→<u>西九条</u><br>轉乘JRゆめ咲線 <u>西九条</u>→<u>ユニバーサルシティ</u></div>
+          <div class="transit-strip-note">預計搭乘 08:33 班次・車程約30分鐘・車資580円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">環球影城 USJ</span>
+            
+          </div>
+          <div class="stop-note">門票景點，營業時間依當日公告，9月初約9:00–21:00・門票已購買：門票 TWD$1960／快速通關4 TWD$3320</div>
+          <ul class="stop-details"><li>快速通關4～Minecart &amp; JAWS～・入場日期 2026/9/4（五）</li><li class="li-highlight">16:50–17:50 超級任天堂世界 SUPER NINTENDO WORLD 入場時段</li><li class="li-highlight">17:20–17:50 瑪利歐賽車：庫巴的挑戰／瘋狂礦車 Mine Cart Madness</li><li class="li-highlight">16:50–17:20 瑪利歐賽車：庫巴的挑戰 Mario Kart: Koopa&#x27;s Challenge</li><li>☆選擇 B：飛天翼龍 The Flying Dinosaur 或 哈利波特禁忌之旅（二選一）</li><li>☆選擇 A：侏儸紀公園乘船遊 Jurassic Park - The Ride 或 大白鯊 JAWS（二選一）</li><li>當期活動「ONE PIECE 首映夏日祭 2026」7/30–11/19，哈利活夢幻乘車推出海賊王聯名版本，含在門票內免費體驗</li><li class="li-highlight">25週年遊行「NO LIMIT! パレード～Discover U!!!版～」夏季場次 16:15開始，約40分（9/4適用6/29–9/8夏季時段），皮卡丘・瑪利歐・Hello Kitty・史努比・小小兵等角色全員出演，免費觀賞（付費特別鑑賞區2,100円），確切時間仍以出發前約1–1.5週USJ官網公告為準</li><li>水世界：常態演出，每日1–4場，確切場次時間當天公告，無固定時刻表</li></ul>
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=環球影城 USJ&amp;query_place_id=ChIJXeLVg9DgAGARqlIyMCX-BTY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="4">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day4</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">京都進香之旅</span>
+            <span class="day-date">2026/9/5（週六）</span>
+          </div>
+          <div class="stop-list">
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">阿關&amp;翊榛組<br>Osaka Metro堺筋線 <u>日本橋(大阪府)</u>→<u>北浜(大阪府)</u><br>轉乘京阪本線急行 <u>北浜</u>→<u>伏見稲荷</u></div>
+          <div class="transit-strip-note">預計搭乘 5:34 堺筋線／5:49 京阪本線急行 班次・車程約1小時・車資670円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">伏見稻荷大社</span>
+            
+          </div>
+          <div class="stop-note">授與所 8:00–18:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=伏見稻荷大社&amp;query_place_id=ChIJIW0uPRUPAWAR6eI6dRzKGns" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">吉依卡哇（ちいかわ）專賣店</span>
+            
+          </div>
+          <div class="stop-note">伏見稻荷參道，營業時間 9:30–17:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ちいかわもぐもぐ本舗 京都伏見店&amp;query_place_id=ChIJD_wFlOkPAWARkSAvKJlcbmU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">京阪本線 <u>伏見稲荷</u>→<u>出町柳</u><br>出站後叫車前往<u>晴明神社</u></div>
+          <div class="transit-strip-note">京阪本線 車程22分鐘・車資300円・轉乘計程車車程約8分鐘・車資約1200–1500円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">晴明神社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=晴明神社&amp;query_place_id=ChIJUXmPed8HAWAR0BFoGpHqivI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">叫車前往<u>御金神社</u></div>
+          <div class="transit-strip-note">叫車車程6分鐘・車資約900–1200円・或步行30分鐘</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">御金神社</span>
+            
+          </div>
+          <div class="stop-note">求財運知名神社，黃金鳥居・授與所 10:00–16:00</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=御金神社&amp;query_place_id=ChIJt15X_IAIAWARh51c3kSmC5g" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">叫車前往<u>本能寺</u></div>
+          <div class="transit-strip-note">叫車車程6分鐘・車資約700–900円・或步行約18分鐘</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">本能寺</span>
+            
+          </div>
+          <div class="stop-note">有時間再去・織田信長歷史遺跡・6:00–17:00</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=本能寺&amp;query_place_id=ChIJAR2bZpIIAWAR5joJ9NbWjR4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">阿關&amp;翊榛組<br>叫車前往<u>八坂神社</u>與莉莉&amp;莉亞會合</div>
+          <div class="transit-strip-note">叫車車程約10分鐘・車資約1000–1300円・或步行約25分鐘・或搭京都市營東西線 京都市役所前→東山 車程2分鐘・車資220円，再步行約13分鐘</div>
+        </div>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">莉莉&amp;莉亞組<br>Osaka Metro堺筋線 <u>日本橋(大阪府)</u>→<u>北浜(大阪府)</u><br>轉乘京阪本線急行 <u>北浜</u>→<u>祇園四条</u></div>
+          <div class="transit-strip-note">預計搭乘 08:26 堺筋線／08:38 京阪本線急行 班次・車程約1小時・車資680円<br>祇園四条出口：5號出口電扶梯（上行）・6號出口僅樓梯，但離和服店最近・7號出口無障礙電梯</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">八坂神社</span>
+            <span class="time-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10:00–12:00</span>
+          </div>
+          <div class="stop-note">和服拍照時段・授與所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=八坂神社&amp;query_place_id=ChIJqewQoHkIAWAR6RokWp3Iesc" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">清水寺</span>
+            
+          </div>
+          <div class="stop-note">門票景點，6:00–18:00・門票 大人500円</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=清水寺&amp;query_place_id=ChIJB_vchdMIAWARujTEUIZlr2I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">京都護國神社</span>
+            
+          </div>
+          <div class="stop-note">社務所 9:00–17:00</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=京都護國神社&amp;query_place_id=ChIJy595gNAIAWARAQmAag8k6zw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name"><u>祇園四条</u>→<u>下鴨神社/河合神社</u></div>
+          <div class="transit-strip-note">預計15:00要換好衣服搭車離開祇園四条・可直接叫車前往</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">下鴨神社/河合神社</span>
+            
+          </div>
+          <div class="stop-note">河合神社位於下鴨神社境內・授與所 9:00–16:30</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=下鴨神社&amp;query_place_id=ChIJf438RkAIAWARzM3lfzI7uAM" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">京阪本線 <u>出町柳</u>→<u>祇園四条</u></div>
+          <div class="transit-strip-note">車程5分鐘・車資240円・也可叫車直接前往京都高島屋開始逛街</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">河原町逛街</span>
+            
+          </div>
+          <div class="stop-note">SOUSOU一條街</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=河原町&amp;query_place_id=ChIJDY9Mb5UIAWARWD9g2V4mSUQ" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">預計20:00離開河原町，返回大阪<br>A路線：京阪本線特急 <u>祇園四条</u>→<u>北浜(大阪府)</u><br>轉乘Osaka Metro堺筋線 <u>北浜(大阪府)</u>→<u>日本橋(大阪府)</u><br><span class="tsn-red">B路線：阪急京都本線特急 <u>京都河原町</u>→<u>淡路</u>・優先選擇（可不需刷出站轉乘）<br>轉乘阪急千里線 <u>淡路</u>→<u>日本橋(大阪府)</u></span></div>
+          <div class="transit-strip-note">A路線：車程約1小時・車資680円　B路線：車程約1小時・車資650円・B路線阪急京都線特急指定車廂 PRiVACE（4號車）可線上預訂一個位子500日圓</div>
+        </div>
+        <a class="transit-strip-link" href="https://privace.hankyu.co.jp/order/search.html" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></svg>
+          PRiVACE 訂位網站
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+    <div class="day-panel " data-day="5">
+      <div class="card day-card">
+        <div class="hanko-col">
+          <div class="hanko">
+            <span class="hanko-kanji">Day5</span>
+          </div>
+          <div class="hanko-line"></div>
+        </div>
+        <div class="day-body">
+          <div class="day-title-row">
+            <span class="day-title">逛街補貨日</span>
+            <span class="day-date">2026/9/6（週日）</span>
+          </div>
+          <div class="stop-list">
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">難波八坂神社</span>
+            
+          </div>
+          <div class="stop-note">早起步行前往拍照吃早餐・路程約25分鐘・社務所 9:00–17:00・09:30前回到東橫退房（或退房後再出發前往）</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=難波八坂神社&amp;query_place_id=ChIJQVW9eXLnAGARn-pUdRl0w4A" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-hotel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8"/><path d="M2 20h20"/><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><line x1="12" y1="4" x2="12" y2="10"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:700">東橫INN 日本橋文樂劇場前</span>
+            
+          </div>
+          <div class="stop-note">Check-out・Airporter 寄送行李</div>
+          
+          <a class="booking-chip" href="https://airporter.co.jp/order/create/order?city=osaka" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg>Airporter 行李寄送預約<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=東橫INN 日本橋文樂劇場前&amp;query_place_id=ChIJu9sqV9fnAGAR912Jd-dtz3I" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">Osaka Metro四つ橋線 <u>なんば(地下鉄)</u>→<u>住之江公園(3號出口)</u></div>
+          <div class="transit-strip-note">預計搭乘 9:44／9:49／9:54 班次・車程25分鐘・車資290円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">大阪護國神社</span>
+            
+          </div>
+          <div class="stop-note">社務所（祈禱・御札授與・朱印）10:30–15:30</div>
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=大阪護國神社&amp;query_place_id=ChIJu3AGuhDdAGARrAodUjPxxT8" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">心齋橋逛街</span>
+            
+          </div>
+          <div class="stop-note">商店約 10:00 後陸續營業・最晚14:30要搭車離開心齋橋</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋逛街&amp;query_place_id=ChIJc7M3_BPnAGARI8OZlTnEXGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="transit-strip">
+        <div class="transit-strip-text">
+          <div class="transit-strip-name">Osaka Metro御堂筋線 <u>心斎橋</u>→<u>天王寺</u><br>預計搭乘 14:03／14:07<br>轉乘JR関空快速 <u>天王寺</u>→<u>鳳(西出口)</u><br>預計搭乘 14:25</div>
+          <div class="transit-strip-note">車程約48分鐘・車資560円</div>
+        </div>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-shrine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="7" x2="22" y2="7"/><line x1="1" y1="4" x2="23" y2="4"/><line x1="5" y1="4" x2="5" y2="21"/><line x1="19" y1="4" x2="19" y2="21"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">大鳥大社</span>
+            
+          </div>
+          <div class="stop-note">授與所 9:00–16:30・最晚16:45要離開神社，搭往關西空港的JR</div>
+          
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=大鳥大社&amp;query_place_id=ChIJTZC2jjnbAGAR8mU6R4C1Ziw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div>
+      <div class="stop-row">
+        <div class="stop-icon k-airport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg></div>
+        <div class="stop-body">
+          <div class="stop-name-row">
+            <span class="stop-name" style="font-weight:500">關西空港 KIX</span>
+            
+          </div>
+          <div class="stop-note">IT213 賦歸・17:50前需抵達並開始排隊報到・抵達後去關西空港展望台買JAL御翔印</div>
+          <a class="booking-chip block-chip" href="https://www.kansai-airport.or.jp/tw/shop-and-dine/skyview/access" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>展望台接駁車時間<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+          
+        </div>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=關西空港 KIX&amp;query_place_id=ChIJ9_rNIxO5AGARiI-QjZ-ncfE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+      </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-docs" class="panel hidden">
+    <div class="card progress-card">
+      <div class="progress-top">
+        <span class="progress-title">準備進度</span>
+        <span class="progress-count"><span id="doc-done">0</span> / 17</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg><span>出發前必備文件</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-0-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">護照正本（效期需 6 個月以上）</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">Visit Japan Web 入境／海關 QR Code</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-2">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">IT210／IT213 機票電子憑證</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-2b">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">BR178／BR129 機票電子憑證</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-3">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">東橫INN 神戶站北口 訂房確認單（關訂單號碼：5346595）</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-4">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">東橫INN 日本橋文樂劇場前 訂房確認單（關訂單號碼：5253885）</span>
+          </button>
+          <button class="doc-item" data-id="doc-0-5">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">富邦旅平卡 計畫2／國外300萬</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="12" y1="11" x2="12" y2="17"/></svg><span>行前準備</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-1-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">上網分享器或 eSIM 預訂</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">兌換日幣現金</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-2">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">IC 卡（ICOCA／Suica）或關西周遊券</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-3">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">USJ 快速通關票券（如需要）</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-4">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">和服體驗預約（八坂神社周邊，9/5 10:00–12:00）</span>
+          </button>
+          <button class="doc-item" data-id="doc-1-5">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">常備藥品、轉接頭與行動電源</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>支付與備援</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-2-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">信用卡（確認可海外刷卡、額度足夠）</span>
+          </button>
+          <button class="doc-item" data-id="doc-2-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">現金與卡片分開放置備份</span>
+          </button></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>緊急聯絡資訊</span></div>
+      <div class="doc-list">
+          <button class="doc-item" data-id="doc-3-0">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">駐大阪辦事處緊急聯絡電話：090-8794-4568（日本境內直撥，限重大緊急事件）</span>
+          </button>
+          <button class="doc-item" data-id="doc-3-1">
+            <span class="doc-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg></span>
+            <span class="doc-check-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="doc-label">富邦產險 SOS 海外緊急救援：+886-2-2563-6292</span>
+          </button></div>
+    </div>
+    <div class="doc-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>此清單為通用建議，實際所需文件請以出發前航空公司與日本入境最新規定為準。</span>
+    </div>
+  </div>
+
+  <div id="panel-procurement" class="panel hidden">
+    <div class="proc-toolbar">
+      <button id="proc-toggle-form" class="proc-add-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        新增代購項目
+      </button>
+    </div>
+    <div class="proc-toolbar">
+      <select id="proc-filter" class="proc-filter-select proc-filter-flex">
+        <option value="全部">全部分類</option>
+        <option value="藥妝">藥妝</option>
+        <option value="動漫">動漫</option>
+        <option value="食品">食品</option>
+        <option value="其他">其他</option>
+      </select>
+      <select id="proc-filter-requester" class="proc-filter-select proc-filter-flex">
+        <option value="全部">全部委託人</option>
+      </select>
+    </div>
+
+    <div id="proc-form" class="card proc-form hidden">
+      <div id="proc-form-title" class="proc-form-title">新增代購項目</div>
+      <label class="proc-field">
+        <span>品名</span>
+        <input id="proc-name" type="text" placeholder="例：曼秀雷敦 AD 乳液" />
+      </label>
+      <div class="proc-row">
+        <label class="proc-field" style="width:70px;">
+          <span>數量</span>
+          <input id="proc-qty" type="number" min="1" value="1" />
+        </label>
+        <label class="proc-field" style="width:90px;">
+          <span>金額（円）</span>
+          <input id="proc-price" type="number" min="0" placeholder="0" />
+        </label>
+        <label class="proc-field" style="flex:1;">
+          <span>委託人</span>
+          <input id="proc-requester" type="text" placeholder="例：媽媽" />
+        </label>
+      </div>
+      <label class="proc-field">
+        <span>分類</span>
+        <div id="proc-cat-group" class="proc-cat-group">
+          <button type="button" class="proc-cat-btn active" data-cat="藥妝">藥妝</button>
+          <button type="button" class="proc-cat-btn" data-cat="動漫">動漫</button>
+          <button type="button" class="proc-cat-btn" data-cat="食品">食品</button>
+          <button type="button" class="proc-cat-btn" data-cat="其他">其他</button>
+        </div>
+      </label>
+      <label class="proc-field">
+        <span>備註（選填）</span>
+        <input id="proc-note" type="text" placeholder="例：藍色包裝、大瓶裝" />
+      </label>
+      <div class="proc-checkbox-row">
+        <label class="proc-checkbox-field">
+          <input id="proc-purchased" type="checkbox" />
+          <span>已購買</span>
+        </label>
+        <label class="proc-checkbox-field proc-checkbox-notfound">
+          <input id="proc-notfound" type="checkbox" />
+          <span>沒買到</span>
+        </label>
+      </div>
+      <label class="proc-field">
+        <span>照片（選填）</span>
+        <div class="proc-photo-row">
+          <img id="proc-photo-preview" class="proc-photo-preview hidden" alt="" />
+          <button id="proc-photo-remove" type="button" class="proc-photo-remove hidden">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <label id="proc-photo-btn" class="proc-photo-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+            <input id="proc-photo-input" type="file" accept="image/*" style="display:none" />
+          </label>
+        </div>
+      </label>
+      <div class="proc-form-actions">
+        <button id="proc-save" class="proc-save-btn">儲存</button>
+        <button id="proc-cancel" class="proc-cancel-btn">取消</button>
+      </div>
+    </div>
+
+    <div id="proc-summary" class="proc-summary hidden">
+      <span id="proc-summary-count"></span>
+      <span id="proc-summary-total" class="proc-summary-total"></span>
+    </div>
+    <div id="proc-empty" class="proc-empty hidden">目前還沒有代購項目，點上面「新增代購項目」開始記錄。</div>
+    <div id="proc-list"></div>
+
+    <button id="proc-export-excel" class="proc-export-excel-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
+      匯出成 Excel
+    </button>
+
+    <div class="proc-backup-row">
+      <button id="proc-export" class="proc-backup-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>
+        匯出備份
+      </button>
+      <label class="proc-backup-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        匯入備份
+        <input id="proc-import" type="file" accept="application/json" style="display:none" />
+      </label>
+    </div>
+    <div class="doc-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>清單會存在這台裝置的瀏覽器裡。建議出發前用「匯出備份」多存一份 JSON 檔在手機裡，換裝置或清除瀏覽器資料前也記得先備份。</span>
+    </div>
+  </div>
+
+  <div id="proc-lightbox" class="proc-lightbox hidden">
+    <img id="proc-lightbox-img" src="" alt="" />
+    <button id="proc-lightbox-close" class="proc-lightbox-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <div id="proc-confirm" class="proc-confirm-overlay hidden">
+    <div id="proc-confirm-box" class="proc-confirm-box">
+      <div class="proc-confirm-title">確認刪除？</div>
+      <div id="proc-confirm-text" class="proc-confirm-text"></div>
+      <div class="proc-confirm-actions">
+        <button id="proc-confirm-delete" class="proc-confirm-delete-btn">刪除</button>
+        <button id="proc-confirm-cancel" class="proc-confirm-cancel-btn">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-shopping" class="panel hidden">
+    <div class="shop-jump-nav">
+      <button class="shop-jump-btn" data-jump="shop-brands-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        購物店家
+      </button>
+      <button class="shop-jump-btn" data-jump="shop-souvenirs-section">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        伴手禮 TOP 5
+      </button>
+    </div>
+    <div id="shop-brands-section" class="sub-panel">
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>大阪・梅田（大丸梅田／LUCUA／阪急三番街／阪神梅田本店）</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Nintendo OSAKA</div>
+              <div class="shop-item-note">大丸梅田店 13F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Nintendo OSAKA&amp;query_place_id=ChIJlQguMSfnAGARBQISujo7yow" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 大阪梅田店</div>
+              <div class="shop-item-note">阪急三番街南館 B1F・10:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Chiikawa Land Osaka Umeda&amp;query_place_id=ChIJOwETB6HnAGARguAMaM4PyDk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store LUCUA大阪店</div>
+              <div class="shop-item-note">LUCUA 1100・イーレ 5F・10:30–20:30</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Disney Store LUCUA Osaka&amp;query_place_id=ChIJjWZqxo3mAGARIOboBDb1wMg" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">TAKAMI 阪神梅田本店</div>
+              <div class="shop-item-note">C.CUBE 2F・10:00–20:00（週三～週六至21:00）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=C.CUBE Hanshin Umeda&amp;query_place_id=ChIJqW4-u5LmAGARupukHzELXB0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">sanrio house 大阪LUCUA店</div>
+              <div class="shop-item-note">LUCUA 6F・10:30–20:30・西日本首間 sanrio house</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=sanrio house LUCUA Osaka&amp;query_place_id=ChIJhQsDWgDnAGAR7FGGZ4UbARk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... LUCUA大阪店</div>
+              <div class="shop-item-note">LUCUA 8F・10:30–20:30・生活風格選物店（服飾／雜貨／文具）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and LUCUA Osaka&amp;query_place_id=ChIJP5OC8o3mAGARPoSyKxFsxGI" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>大阪・心齋橋（大丸心齋橋／心齋橋PARCO）</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Pokémon Center OSAKA DX</div>
+              <div class="shop-item-note">大丸心齋橋店本館 9F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon Center Osaka DX&amp;query_place_id=ChIJiZ8OQInnAGART2BGEGqySKk" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Sanrio Gallery 心齋橋店</div>
+              <div class="shop-item-note">大丸心齋橋筋店・4層樓西日本最大旗艦店・11:00–20:30</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Sanrio Gallery Shinsaibashi&amp;query_place_id=ChIJLRWhNBHnAGARRKfLJ3rn3dw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">TAKAMI 大丸心齋橋店</div>
+              <div class="shop-item-note">指甲油保養品牌・本館 1F 化妝品賣場・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=TAKAMI Daimaru Shinsaibashi&amp;query_place_id=ChIJacRBBxDnAGARpmKHbR7kWgg" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store 心齋橋PARCO店</div>
+              <div class="shop-item-note">心齋橋PARCO 5F・2026/8/26 新開幕，與吉依卡哇同棟</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=心齋橋PARCO 大阪市中央区心斎橋筋1-8-3" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 心齋橋PARCO店</div>
+              <div class="shop-item-note">心齋橋PARCO 6F・10:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=CHIIKAWA LAND Shinsaibashi PARCO&amp;query_place_id=ChIJK8bfTADnAGARZt7ZTovTrZw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Onitsuka Tiger 大阪心齋橋</div>
+              <div class="shop-item-note">西日本旗艦店・1F–2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Onitsuka Tiger Osaka Shinsaibashi&amp;query_place_id=ChIJHZAK1RDnAGARrSsWqlpdars" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">ASICS OSAKA SHINSAIBASHI</div>
+              <div class="shop-item-note">1F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ASICS Osaka Shinsaibashi&amp;query_place_id=ChIJE0F1JxHnAGARp2gpTuFLvhE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... なんばパークス店</div>
+              <div class="shop-item-note">なんばパークス 4F・11:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Namba Parks&amp;query_place_id=ChIJy5nrRWnnAGARHeK4cttHK38" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>神戶・三宮</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Onitsuka Tiger 神戶</div>
+              <div class="shop-item-note">關西旗艦店・1F–2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Onitsuka Tiger Kobe&amp;query_place_id=ChIJR6uj1fuOAGARDgawAJRnOe0" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... 神戶Harborland店</div>
+              <div class="shop-item-note">umie NORTHMALL 1F・10:00–20:00・距三宮約1站/步行15分，非順路需另安排</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Kobe Harborland umie&amp;query_place_id=ChIJH_YHdEaPAGARsjOivsDCmqQ" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>京都・四条河原町</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Nintendo KYOTO</div>
+              <div class="shop-item-note">京都髙島屋S.C. T8 7F・10:30–20:00・全國第3間任天堂直營店</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Nintendo KYOTO&amp;query_place_id=ChIJ3dxPvegJAWARjuprBYA4hJE" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Pokémon Center KYOTO</div>
+              <div class="shop-item-note">京都經濟中心 SUINA室町 2F・10:00–20:00・京都限定舞妓皮卡丘</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Pokemon Center Kyoto&amp;query_place_id=ChIJVVVVVZQIAWARUox_Y6uZHzw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇 CHIIKAWA LAND 京都四条河原町店</div>
+              <div class="shop-item-note">京都四条河原町店 3F・11:00–21:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Chiikawa Land Kyoto Shijo Kawaramachi&amp;query_place_id=ChIJl1gmpGMJAWAR-8kzHhcnlm4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">Disney Store 京都四条河原町店</div>
+              <div class="shop-item-note">コトクロス阪急河原町 1&amp;2F・11:00–20:00</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=Disney Store Kyoto Shijo Kawaramachi&amp;query_place_id=ChIJfxyqbJUIAWARSsRO3t8vxpU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div>
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">niko and... 京都寺町店</div>
+              <div class="shop-item-note">寺町通蛸薬師 1–3F・11:00–20:00・1F咖啡／2F男裝雜貨／3F女裝</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=niko and Kyoto Teramachi&amp;query_place_id=ChIJZ2U2kD8JAWARF41ijhS1-nw" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>京都・伏見</span></div>
+      <div class="shop-list">
+          <div class="shop-item-row">
+            <div class="shop-item-body">
+              <div class="shop-item-name">吉依卡哇（ちいかわもぐもぐ本舗）京都伏見店</div>
+              <div class="shop-item-note">伏見稻荷參道・9:30–17:30（行程 Day4 已排入）</div>
+            </div>
+            <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=ちいかわもぐもぐ本舗 京都伏見店&amp;query_place_id=ChIJD_wFlOkPAWARkSAvKJlcbmU" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>地圖</a>
+          </div></div>
+    </div>
+    </div>
+    <div id="shop-souvenirs-section" class="section-divider"><span>伴手禮 TOP 5</span></div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">京都</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=京都駅&amp;query_place_id=ChIJ7wKLka4IAWARCByidG5EGrY" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>京都駅（京すいーつ小径／伴手禮專區）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">阿闍梨餅（滿月）</div>
+              <div class="shop-item-note">半生菓子，比叡山修行僧斗笠造型，紅豆粒餡配Q彈餅皮</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">生八ツ橋（聖護院／井筒八ッ橋本舗）</div>
+              <div class="shop-item-note">京都最具代表性的傳統點心，肉桂香氣＋軟Q外皮，多種內餡口味</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">京ばあむ（美十）</div>
+              <div class="shop-item-note">宇治抹茶＋豆乳年輪蛋糕，抹茶漸層外觀好拍</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">伊藤久右衛門 宇治抹茶系列</div>
+              <div class="shop-item-note">抹茶控必買，濃茶粉、抹茶可可、抹茶甜點齊全</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">鼓月 千寿せんべい</div>
+              <div class="shop-item-note">波浪造型煎餅夾奶油餡，酥脆香甜、送禮大方</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">大阪</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=難波駅&amp;query_place_id=ChIJFXXzNhPnAGARUifDEqMzXl4" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>難波（551蓬萊本店／りくろーおじさん本店一帶）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">551蓬萊 豚まん</div>
+              <div class="shop-item-note">大阪代表美食，多汁豬肉包，一天可賣出約17萬個</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">りくろーおじさん 現烤起司蛋糕</div>
+              <div class="shop-item-note">入口即化的輕盈口感，底部葡萄乾提味，難波本店常大排長龍</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">堂島ロール（Mon cher）</div>
+              <div class="shop-item-note">濕潤鮮奶油蛋糕捲，大阪甜點代表之一</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">面白い恋人（吉本興業）</div>
+              <div class="shop-item-note">「白い恋人」的搞笑山寨版大阪伴手禮，話題性十足</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">大阪限定 Calbee+／じゃがりこ たこ焼き味</div>
+              <div class="shop-item-note">大阪限定口味餅乾零食，個包裝適合分送同事朋友</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="card">
+      <div class="section-head" style="justify-content: space-between;">
+        <span style="display:flex; align-items:center; gap:8px; color: var(--seal);">神戶</span>
+        <a class="map-chip" href="https://www.google.com/maps/search/?api=1&amp;query=元町駅&amp;query_place_id=ChIJFyYemvKFAGARXfpsr2THmv8" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>元町（神戶風月堂／モロゾフ／ユーハイム本店一帶）</a>
+      </div>
+      <div class="shop-list">
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">1</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">モロゾフ 布丁／巧克力</div>
+              <div class="shop-item-note">1931年神戶トアロード起家的洋菓子老店，經典卡士達布丁</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">2</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">神戶風月堂 ゴーフル</div>
+              <div class="shop-item-note">薄脆法式煎餅夾奶油餡，1927年至今的神戶伴手禮代表</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">3</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">神戶布丁（トーラク）</div>
+              <div class="shop-item-note">濃郁滑順帶微苦焦糖香，車站超商就買得到</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">4</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">ユーハイム 年輪蛋糕</div>
+              <div class="shop-item-note">日本第一家做年輪蛋糕的德式洋菓子店，元町本店限定品項多</div>
+            </div>
+          </div>
+          <div class="souvenir-item-row">
+            <div class="souvenir-rank">5</div>
+            <div class="shop-item-body">
+              <div class="shop-item-name">觀音屋 丹麥起司蛋糕</div>
+              <div class="shop-item-note">北野／元町一帶排隊名店，起司控必買</div>
+            </div>
+          </div></div>
+    </div>
+    <div class="doc-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>部分店鋪（如 Nintendo OSAKA、Onitsuka Tiger 大阪心齋橋）人潮多時會發放整理券，建議一開店就前往或先查詢當日公告。</span>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    <span>行程僅供參考，實際交通時間與景點開放時間請於出發前再次確認</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="flight">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2 15 22 11 13 2 9 22 2Z"/></svg>
+    航班
+  </button>
+  <button class="tab-btn" data-tab="itinerary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></svg>
+    行程
+  </button>
+  <button class="tab-btn" data-tab="shopping">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    必買
+  </button>
+  <button class="tab-btn" data-tab="docs">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+    文件
+  </button>
+  <button class="tab-btn" data-tab="procurement">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V21"/><path d="M3 12h18"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>
+    代購
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.add('hidden'); });
+      var target = document.getElementById('panel-' + btn.getAttribute('data-tab'));
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  document.querySelectorAll('.day-sel-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var day = btn.getAttribute('data-day');
+      document.querySelectorAll('.day-sel-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.day-panel').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-day') === day);
+      });
+    });
+  });
+
+  function updateProgress() {
+    var all = document.querySelectorAll('.doc-item');
+    var done = document.querySelectorAll('.doc-item.checked');
+    var fill = document.getElementById('progress-fill');
+    var doneCount = document.getElementById('doc-done');
+    if (fill) fill.style.width = (all.length ? (done.length / all.length * 100) : 0) + '%';
+    if (doneCount) doneCount.textContent = done.length;
+  }
+
+  document.querySelectorAll('.doc-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      item.classList.toggle('checked');
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+
+  document.querySelectorAll('.shop-jump-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var target = document.getElementById(btn.getAttribute('data-jump'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ---- Procurement list (代購清單) ----
+  (function () {
+    var STORAGE_KEY = 'kansai-procurement-items-v1';
+    var CATEGORIES = ['藥妝', '動漫', '食品', '其他'];
+    var currentCategory = '藥妝';
+    var currentPhoto = null;
+    var editingId = null;
+
+    var formEl = document.getElementById('proc-form');
+    var formTitleEl = document.getElementById('proc-form-title');
+    var toggleBtn = document.getElementById('proc-toggle-form');
+    var cancelBtn = document.getElementById('proc-cancel');
+    var saveBtn = document.getElementById('proc-save');
+    var listEl = document.getElementById('proc-list');
+    var emptyEl = document.getElementById('proc-empty');
+    var summaryEl = document.getElementById('proc-summary');
+    var summaryCountEl = document.getElementById('proc-summary-count');
+    var summaryTotalEl = document.getElementById('proc-summary-total');
+    var filterSelect = document.getElementById('proc-filter');
+    var filterRequesterSelect = document.getElementById('proc-filter-requester');
+    var nameInput = document.getElementById('proc-name');
+    var qtyInput = document.getElementById('proc-qty');
+    var priceInput = document.getElementById('proc-price');
+    var requesterInput = document.getElementById('proc-requester');
+    var noteInput = document.getElementById('proc-note');
+    var purchasedInput = document.getElementById('proc-purchased');
+    var notFoundInput = document.getElementById('proc-notfound');
+    var photoInput = document.getElementById('proc-photo-input');
+    var photoPreview = document.getElementById('proc-photo-preview');
+    var photoRemoveBtn = document.getElementById('proc-photo-remove');
+    var photoBtn = document.getElementById('proc-photo-btn');
+    var exportBtn = document.getElementById('proc-export');
+    var importInput = document.getElementById('proc-import');
+
+    function loadItems() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveItems(items) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      } catch (e) {
+        console.error('save failed', e);
+      }
+    }
+
+    function resizeImage(file, maxDim, cb) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var width = img.width, height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) { height = Math.round(height * maxDim / width); width = maxDim; }
+            else { width = Math.round(width * maxDim / height); height = maxDim; }
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          cb(canvas.toDataURL('image/jpeg', 0.72));
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function render() {
+      var allItems = loadItems();
+
+      // repopulate requester filter options, preserving current selection if still valid
+      var requesters = Array.from(new Set(allItems.map(function (it) { return it.requester; }).filter(function (r) { return r && r.trim(); })));
+      var prevRequesterVal = filterRequesterSelect.value;
+      filterRequesterSelect.innerHTML = '<option value="全部">全部委託人</option>' +
+        requesters.map(function (r) { return '<option value="' + esc(r) + '">' + esc(r) + '</option>'; }).join('');
+      filterRequesterSelect.value = requesters.indexOf(prevRequesterVal) >= 0 ? prevRequesterVal : '全部';
+
+      var filterVal = filterSelect.value;
+      var requesterVal = filterRequesterSelect.value;
+      var items = allItems
+        .filter(function (it) { return filterVal === '全部' || it.category === filterVal; })
+        .filter(function (it) { return requesterVal === '全部' || it.requester === requesterVal; });
+
+      listEl.innerHTML = '';
+      CATEGORIES.forEach(function (cat) {
+        var list = items.filter(function (it) { return it.category === cat; })
+          .sort(function (a, b) { return a.name.localeCompare(b.name, 'zh-Hant'); });
+        if (list.length === 0) return;
+        var card = document.createElement('div');
+        card.className = 'proc-cat-card';
+        var head = document.createElement('div');
+        head.className = 'proc-cat-head';
+        head.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="proc-cat-title">' + esc(cat) + '</span><span class="proc-cat-count">（' + list.length + '）</span>';
+        card.appendChild(head);
+        list.forEach(function (it) {
+          var row = document.createElement('div');
+          row.className = 'proc-item-row';
+          var dimmed = it.purchased || it.notFound;
+          var photoHtml = it.photo
+            ? '<img class="proc-item-photo proc-item-photo-click" data-photo="' + it.photo + '" src="' + it.photo + '" alt="" style="' + (dimmed ? 'opacity:.5' : '') + '">'
+            : '<div class="proc-item-photo-placeholder" style="' + (dimmed ? 'opacity:.5' : '') + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>';
+          var priceText = (it.price !== '' && it.price != null) ? '・¥' + Number(it.price).toLocaleString() : '';
+          var metaText = '數量 ' + esc(String(it.qty)) + (it.requester ? '・委託人：' + esc(it.requester) : '') + priceText;
+          var noteHtml = it.note ? '<div class="proc-item-note">' + esc(it.note) + '</div>' : '';
+          var notFoundTag = it.notFound ? '<span class="proc-item-tag">沒買到</span>' : '';
+          var checkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+          var circleIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>';
+          row.innerHTML =
+            '<button class="proc-item-toggle' + (it.purchased ? ' purchased' : '') + '" data-id="' + it.id + '" data-action="purchased" title="已購買">' + (it.purchased ? checkIcon : circleIcon) + '</button>' +
+            photoHtml +
+            '<div class="proc-item-body' + (dimmed ? ' purchased' : '') + '" style="flex:1;min-width:0;"><div class="proc-item-name-row"><span class="proc-item-name' + (dimmed ? ' purchased' : '') + '">' + esc(it.name) + '</span>' + notFoundTag + '</div><div class="proc-item-meta">' + metaText + '</div>' + noteHtml + '</div>' +
+            '<button class="proc-item-edit" data-id="' + it.id + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
+            '<button class="proc-item-delete" data-id="' + it.id + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+          card.appendChild(row);
+        });
+        listEl.appendChild(card);
+      });
+
+      emptyEl.classList.toggle('hidden', items.length > 0);
+      emptyEl.textContent = allItems.length === 0 ? '目前還沒有代購項目，點上面「新增代購項目」開始記錄。' : '此分類目前沒有項目。';
+
+      var totalAmount = items.reduce(function (sum, it) { return sum + (Number(it.price) || 0) * (Number(it.qty) || 1); }, 0);
+      summaryEl.classList.toggle('hidden', items.length === 0);
+      exportExcelBtn.classList.toggle('hidden', allItems.length === 0);
+      var summaryLabel = (filterVal === '全部' ? '全部分類' : filterVal) + (requesterVal !== '全部' ? '・' + requesterVal : '');
+      summaryCountEl.textContent = summaryLabel + ' 共 ' + items.length + ' 項';
+      summaryTotalEl.textContent = totalAmount > 0 ? '合計 ¥' + totalAmount.toLocaleString() : '';
+
+      listEl.querySelectorAll('.proc-item-photo-click').forEach(function (img) {
+        img.addEventListener('click', function () {
+          openLightbox(img.getAttribute('data-photo'));
+        });
+      });
+      listEl.querySelectorAll('.proc-item-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var next = loadItems().map(function (it) {
+            if (it.id !== id) return it;
+            return Object.assign({}, it, { purchased: !it.purchased, notFound: false });
+          });
+          saveItems(next);
+          render();
+        });
+      });
+      listEl.querySelectorAll('.proc-item-delete').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var it = loadItems().find(function (x) { return x.id === id; });
+          if (it) openConfirmDelete(it);
+        });
+      });
+      listEl.querySelectorAll('.proc-item-edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-id');
+          var it = loadItems().find(function (x) { return x.id === id; });
+          if (!it) return;
+          startEdit(it);
+        });
+      });
+    }
+
+    function resetForm() {
+      nameInput.value = '';
+      qtyInput.value = '1';
+      priceInput.value = '';
+      requesterInput.value = '';
+      noteInput.value = '';
+      purchasedInput.checked = false;
+      notFoundInput.checked = false;
+      currentPhoto = null;
+      currentCategory = '藥妝';
+      editingId = null;
+      formTitleEl.textContent = '新增代購項目';
+      photoPreview.classList.add('hidden');
+      photoRemoveBtn.classList.add('hidden');
+      photoBtn.classList.remove('hidden');
+      document.querySelectorAll('.proc-cat-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat') === currentCategory);
+      });
+    }
+
+    function startEdit(it) {
+      nameInput.value = it.name;
+      qtyInput.value = it.qty;
+      priceInput.value = (it.price !== '' && it.price != null) ? it.price : '';
+      requesterInput.value = it.requester || '';
+      noteInput.value = it.note || '';
+      purchasedInput.checked = !!it.purchased;
+      notFoundInput.checked = !!it.notFound;
+      currentPhoto = it.photo || null;
+      currentCategory = it.category;
+      editingId = it.id;
+      formTitleEl.textContent = '編輯代購項目';
+      document.querySelectorAll('.proc-cat-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-cat') === currentCategory);
+      });
+      if (currentPhoto) {
+        photoPreview.src = currentPhoto;
+        photoPreview.classList.remove('hidden');
+        photoRemoveBtn.classList.remove('hidden');
+        photoBtn.classList.add('hidden');
+      } else {
+        photoPreview.classList.add('hidden');
+        photoRemoveBtn.classList.add('hidden');
+        photoBtn.classList.remove('hidden');
+      }
+      formEl.classList.remove('hidden');
+      formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      if (!formEl.classList.contains('hidden') && !editingId) {
+        formEl.classList.add('hidden');
+        return;
+      }
+      resetForm();
+      formEl.classList.remove('hidden');
+    });
+    cancelBtn.addEventListener('click', function () {
+      formEl.classList.add('hidden');
+      resetForm();
+    });
+
+    filterSelect.addEventListener('change', render);
+    filterRequesterSelect.addEventListener('change', render);
+
+    purchasedInput.addEventListener('change', function () {
+      if (purchasedInput.checked) notFoundInput.checked = false;
+    });
+    notFoundInput.addEventListener('change', function () {
+      if (notFoundInput.checked) purchasedInput.checked = false;
+    });
+
+    document.querySelectorAll('.proc-cat-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        currentCategory = btn.getAttribute('data-cat');
+        document.querySelectorAll('.proc-cat-btn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+      });
+    });
+
+    photoInput.addEventListener('change', function () {
+      var file = photoInput.files && photoInput.files[0];
+      if (!file) return;
+      resizeImage(file, 500, function (dataUrl) {
+        currentPhoto = dataUrl;
+        photoPreview.src = dataUrl;
+        photoPreview.classList.remove('hidden');
+        photoRemoveBtn.classList.remove('hidden');
+        photoBtn.classList.add('hidden');
+      });
+    });
+    photoRemoveBtn.addEventListener('click', function () {
+      currentPhoto = null;
+      photoInput.value = '';
+      photoPreview.classList.add('hidden');
+      photoRemoveBtn.classList.add('hidden');
+      photoBtn.classList.remove('hidden');
+    });
+
+    saveBtn.addEventListener('click', function () {
+      var name = nameInput.value.trim();
+      if (!name) { nameInput.focus(); return; }
+      var items = loadItems();
+      var priceVal = priceInput.value === '' ? '' : Number(priceInput.value);
+      if (editingId) {
+        items = items.map(function (it) {
+          if (it.id !== editingId) return it;
+          return Object.assign({}, it, {
+            name: name, qty: Number(qtyInput.value) || 1, price: priceVal,
+            requester: requesterInput.value.trim(), category: currentCategory,
+            note: noteInput.value.trim(), photo: currentPhoto, purchased: purchasedInput.checked, notFound: notFoundInput.checked,
+          });
+        });
+      } else {
+        items.push({
+          id: Date.now().toString(36),
+          name: name,
+          qty: Number(qtyInput.value) || 1,
+          price: priceVal,
+          requester: requesterInput.value.trim(),
+          category: currentCategory,
+          note: noteInput.value.trim(),
+          photo: currentPhoto,
+          purchased: purchasedInput.checked,
+          notFound: notFoundInput.checked,
+        });
+      }
+      saveItems(items);
+      formEl.classList.add('hidden');
+      resetForm();
+      render();
+    });
+
+    exportBtn.addEventListener('click', function () {
+      var items = loadItems();
+      var blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '代購清單備份.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importInput.addEventListener('change', function () {
+      var file = importInput.files && importInput.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          var parsed = JSON.parse(e.target.result);
+          if (Array.isArray(parsed)) {
+            saveItems(parsed);
+            render();
+          }
+        } catch (err) {
+          console.error('invalid backup file', err);
+        }
+      };
+      reader.readAsText(file);
+      importInput.value = '';
+    });
+
+    var lightboxEl = document.getElementById('proc-lightbox');
+    var lightboxImg = document.getElementById('proc-lightbox-img');
+    var lightboxClose = document.getElementById('proc-lightbox-close');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightboxEl.classList.remove('hidden');
+    }
+    function closeLightbox() {
+      lightboxEl.classList.add('hidden');
+      lightboxImg.src = '';
+    }
+    lightboxEl.addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // ---- delete confirmation ----
+    var confirmOverlay = document.getElementById('proc-confirm');
+    var confirmBox = document.getElementById('proc-confirm-box');
+    var confirmText = document.getElementById('proc-confirm-text');
+    var confirmDeleteBtn = document.getElementById('proc-confirm-delete');
+    var confirmCancelBtn = document.getElementById('proc-confirm-cancel');
+    var pendingDeleteId = null;
+
+    function openConfirmDelete(it) {
+      pendingDeleteId = it.id;
+      confirmText.textContent = '將刪除「' + it.name + '」，此動作無法復原。';
+      confirmOverlay.classList.remove('hidden');
+    }
+    function closeConfirmDelete() {
+      pendingDeleteId = null;
+      confirmOverlay.classList.add('hidden');
+    }
+    confirmOverlay.addEventListener('click', closeConfirmDelete);
+    confirmBox.addEventListener('click', function (e) { e.stopPropagation(); });
+    confirmCancelBtn.addEventListener('click', closeConfirmDelete);
+    confirmDeleteBtn.addEventListener('click', function () {
+      if (!pendingDeleteId) return;
+      var next = loadItems().filter(function (it) { return it.id !== pendingDeleteId; });
+      saveItems(next);
+      closeConfirmDelete();
+      render();
+    });
+
+    // ---- Excel (CSV) export ----
+    var exportExcelBtn = document.getElementById('proc-export-excel');
+    function csvEscape(val) {
+      var s = String(val == null ? '' : val);
+      if (/[",\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
+      return s;
+    }
+    exportExcelBtn.addEventListener('click', function () {
+      var allItems = loadItems();
+      var header = ['品名', '數量', '單價', '小計', '委託人', '分類', '狀態', '備註'];
+      var rows = allItems.map(function (it) {
+        var price = (it.price !== '' && it.price != null) ? it.price : '';
+        var subtotal = price !== '' ? Number(price) * (Number(it.qty) || 1) : '';
+        var status = it.notFound ? '沒買到' : (it.purchased ? '已購買' : '未購買');
+        return [it.name, it.qty, price, subtotal, it.requester || '', it.category, status, it.note || ''];
+      });
+      var csv = [header].concat(rows).map(function (row) {
+        return row.map(csvEscape).join(',');
+      }).join('\r\n');
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '代購清單.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>
